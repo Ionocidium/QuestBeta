@@ -78,14 +78,15 @@ public class MainMenu extends JFrame {
 		switch (user.getArea()) {
 			case 1: 
 				// Varisland
-				fp = "e1.c";
-				if (new File("e1.c").exists()) {
+				fp = "./exercises/" + user.getUsername() + "-e1.c";
+				if (new File("./exercises/" + user.getUsername() + "-e1.c").exists()) {
 					//do nothing
 				}
 				else {
 					try {
+						new File("./exercises").mkdir();
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
-						Path file = Paths.get("e1.c");
+						Path file = Paths.get("./exercises/" + user.getUsername() + "-e1.c");
 						Files.write(file, lines, Charset.forName("UTF-8"));
 					}
 					catch (IOException e){
@@ -95,14 +96,14 @@ public class MainMenu extends JFrame {
 				break;
 			case 2:
 				// Syntown
-				fp = "e2.c";
-				if (new File("e2.c").exists()) {
+				fp = "./exercises/" + user.getUsername() + "-e2.c";
+				if (new File("./exercises/" + user.getUsername() + "-e2.c").exists()) {
 					//do nothing
 				}
 				else {
 					try {
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
-						Path file = Paths.get("e2.c");
+						Path file = Paths.get("./exercises/" + user.getUsername() + "-e2.c");
 						Files.write(file, lines, Charset.forName("UTF-8"));
 					}
 					catch (IOException e){
@@ -112,14 +113,14 @@ public class MainMenu extends JFrame {
 				break;
 			case 3:
 				// Inoutown
-				fp = "e3.c";
-				if (new File("e3.c").exists()) {
+				fp = "./exercises/" + user.getUsername() + "-e3.c";
+				if (new File("./exercises/" + user.getUsername() + "-e3.c").exists()) {
 					//do nothing
 				}
 				else {
 					try {
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
-						Path file = Paths.get("e3.c");
+						Path file = Paths.get("./exercises/" + user.getUsername() + "-e3.c");
 						Files.write(file, lines, Charset.forName("UTF-8"));
 					}
 					catch (IOException e){
@@ -129,14 +130,14 @@ public class MainMenu extends JFrame {
 				break;
 			case 4:
 				// Elsif Village
-				fp = "e4.c";
-				if (new File("e4.c").exists()) {
+				fp = "./exercises/" + user.getUsername() + "-e4.c";
+				if (new File("./exercises/" + user.getUsername() + "-e4.c").exists()) {
 					//do nothing
 				}
 				else {
 					try {
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
-						Path file = Paths.get("e4.c");
+						Path file = Paths.get("./exercises/" + user.getUsername() + "-e4.c");
 						Files.write(file, lines, Charset.forName("UTF-8"));
 					}
 					catch (IOException e){
@@ -146,14 +147,14 @@ public class MainMenu extends JFrame {
 				break;
 			case 5:
 				// Looping Meadows
-				fp = "e5.c";
-				if (new File("e5.c").exists()) {
+				fp = "./exercises/" + user.getUsername() + "-e5.c";
+				if (new File("./exercises/" + user.getUsername() + "-e5.c").exists()) {
 					//do nothing
 				}
 				else {
 					try {
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
-						Path file = Paths.get("e5.c");
+						Path file = Paths.get("./exercises/" + user.getUsername() + "-e5.c");
 						Files.write(file, lines, Charset.forName("UTF-8"));
 					}
 					catch (IOException e){
@@ -163,14 +164,14 @@ public class MainMenu extends JFrame {
 				break;
 			case 6:
 				// City of No Return
-				fp = "e6.c";
-				if (new File("e6.c").exists()) {
+				fp = "./exercises/" + user.getUsername() + "-e6.c";
+				if (new File("./exercises/" + user.getUsername() + "-e6.c").exists()) {
 					//do nothing
 				}
 				else {
 					try {
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
-						Path file = Paths.get("e6.c");
+						Path file = Paths.get("./exercises/" + user.getUsername() + "-e6.c");
 						Files.write(file, lines, Charset.forName("UTF-8"));
 					}
 					catch (IOException e){
