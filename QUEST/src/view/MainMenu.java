@@ -104,7 +104,7 @@ public class MainMenu extends JFrame {
 				}
 				else {
 					try {
-						List<String> lines = Arrays.asList("int main () {", "\t", "}");
+						List<String> lines = Arrays.asList("int main () {", "\tint number = 9", "}");
 						Path file = Paths.get("./exercises/" + user.getUsername() + "-e2.c");
 						Files.write(file, lines, Charset.forName("UTF-8"));
 					}
