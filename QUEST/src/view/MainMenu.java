@@ -24,14 +24,19 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainMenu extends JFrame {
 
@@ -176,6 +181,7 @@ public class MainMenu extends JFrame {
 			case 7:
 				// tower preparations
 				break;
+				
 		}
 		
 		//JOptionPane.showMessageDialog(null, u + " " + p + " " + ac + " " + pt);

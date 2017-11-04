@@ -16,6 +16,10 @@ import model.User;
 
 public class ErrorPolling {
 
+	private boolean quest = false;
+	private boolean questexists = false; 
+	private boolean questcomplete = false;
+	
 	private static String ERROR = " ERROR  :";
 	private static String WARNING = " WARNING:";
 	private static String NOTE = " NOTE   :";
@@ -117,6 +121,7 @@ public class ErrorPolling {
 			Statement stmt = null;
 
 			try {
+				
 				Class.forName("com.mysql.jdbc.Driver");	        
 
 				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
@@ -182,7 +187,8 @@ public class ErrorPolling {
 								                "WHERE U_Num = " + user.getUserNumber() + " ";
 
 								stmt.executeUpdate(userup);
-
+								
+								questcomplete = true;
 							} 
 							catch(Exception a) {
 								System.out.println(a.getMessage());	    	
@@ -237,39 +243,66 @@ public class ErrorPolling {
 						}
 						
 						/**
-						 * if the amount of quests are less than 5, we generate one quest, but first we access
-						 * the quest db for the corresponding error
+						 * the program proceeds to check if there is already a quest associated with the current
+						 * error, if there is, we don't create one
 						 */
 						
-						query = "SELECT * FROM quests " +
-								"WHERE Q_Num = " + errorTyp[i] + " ";
-					
-						rs = stmt.executeQuery(query);
-						
-						int num = 0;
-						String ttl = "";
-						String msg = "";
-						int pts = 0;
-						int ach = 0;
-						
-						if (rs.next()) {
-							rows = rs.getInt(1);
-							num = rs.getInt("Q_Num");
-							ttl = rs.getString("Q_Ttl");
-							msg = rs.getString("Q_Msg");
-							pts = rs.getInt("Q_Pts");
-							ach = rs.getInt("A_Num");
+						int j = 0;
+						while (questTyp[j] != 0) {
+							if (questTyp[j] == errorTyp[i]) {
+								try {
+									questexists = true;
+								} 
+								catch(Exception a) {
+									System.out.println(a.getMessage());	    	
+									JOptionPane.showMessageDialog(null, "A database error occured.");
+								}	
+							}
+							j++;
 						}
 						
 						/**
-						 * after obtaining the corresponding quest, we generate the quest itself and insert
-						 * it into the db
+						 * if the amount of quests are less than 5, we generate one quest, but first we access
+						 * the quest db for the corresponding error
+						 * if there is a quest of the same type available, then we do not need to create a new
+						 * one for the quest
 						 */
 						
-						query = "INSERT INTO userquests (UQ_Qnm, UQ_Pnm, UQ_Pts, UQ_Pth, Q_Num, U_Num) " +
-								"VALUES ('" + ttl + "', '" + msg + "', '" + pts + "', '" + filePath + "', '" + num + "', '" + user.getUserNumber() + "')";
-						
-						stmt.executeUpdate(query);
+						if (questexists == false) {
+							query = "SELECT * FROM quests " +
+									"WHERE Q_Num = " + errorTyp[i] + " ";
+
+							rs = stmt.executeQuery(query);
+
+							int num = 0;
+							String ttl = "";
+							String msg = "";
+							int pts = 0;
+							int ach = 0;
+
+							if (rs.next()) {
+								rows = rs.getInt(1);
+								num = rs.getInt("Q_Num");
+								ttl = rs.getString("Q_Ttl");
+								msg = rs.getString("Q_Msg");
+								pts = rs.getInt("Q_Pts");
+								ach = rs.getInt("A_Num");
+							}
+
+							/**
+							 * after obtaining the corresponding quest, we generate the quest itself and insert
+							 * it into the db
+							 */
+
+							query = "INSERT INTO userquests (UQ_Qnm, UQ_Pnm, UQ_Pts, UQ_Pth, Q_Num, U_Num) " +
+									"VALUES ('" + ttl + "', '" + msg + "', '" + pts + "', '" + filePath + "', '" + num + "', '" + user.getUserNumber() + "')";
+
+							stmt.executeUpdate(query);
+							quest = true;
+						}
+						else {
+							questexists = false;
+						}
 						
 					} 
 					catch(Exception a) {
@@ -280,9 +313,19 @@ public class ErrorPolling {
 				catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-				break;
 			}
+		}
+		if (quest == true && questcomplete == true) {
+			JOptionPane.showMessageDialog(null, "You have recieved new quest(s) and have completed quest(s)!");
+		}
+		else if (quest == true) {
+			JOptionPane.showMessageDialog(null, "You have recieved new quest(s)!");
+		}
+		else if (questcomplete == true) {
+			JOptionPane.showMessageDialog(null, "You have completed quest(s)!");
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Nice! No errors found!");
 		}
 	}
 	
