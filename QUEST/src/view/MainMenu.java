@@ -248,10 +248,10 @@ public class MainMenu extends JFrame {
 		});
 		bBadge.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setBounds(5, 199, 246, 90);
-		btnNewButton.setIcon(new ImageIcon(MainMenu.class.getResource("/compile-transparent-small.png")));
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton bCompile = new JButton("");
+		bCompile.setBounds(5, 199, 246, 90);
+		bCompile.setIcon(new ImageIcon(MainMenu.class.getResource("/compile-transparent-small.png")));
+		bCompile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					PCompiler cmp = new PCompiler();
@@ -275,13 +275,25 @@ public class MainMenu extends JFrame {
 		
 		String userPts = Integer.toString(user.getPoints());
 		
-		JLabel lblArea = new JLabel("Area:");
-		lblArea.setBounds(15, 59, 62, 32);
-		lblArea.setFont(new Font("Tahoma", Font.PLAIN, 26));
+		String area = "";
+		
+		switch (user.getArea()) {
+			case 1: area = "Varisland"; break;
+			case 2: area = "Syntown"; break;
+			case 3: area = "Inoutown"; break;
+			case 4: area = "Elsif Village"; break;
+			case 5: area = "Looping Meadows"; break;
+			case 6: area = "City of No Return"; break;
+			case 7: area = "The Tower of Knowledge"; break;
+		}
+		
+		JLabel lblArea = new JLabel("Area: " + area);
+		lblArea.setBounds(15, 59, 254, 32);
+		lblArea.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
 		JButton bMap = new JButton("");
 		bMap.setBounds(5, 102, 246, 90);
-		bMap.setIcon(new ImageIcon(MainMenu.class.getResource("/res/mapsmall.png")));
+		bMap.setIcon(new ImageIcon(MainMenu.class.getResource("/mapsmall.png")));
 		bMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
@@ -290,7 +302,7 @@ public class MainMenu extends JFrame {
 		contentPane.add(lblName);
 		contentPane.add(lblArea);
 		contentPane.add(bRandomTest);
-		contentPane.add(btnNewButton);
+		contentPane.add(bCompile);
 		contentPane.add(bLeaderboards);
 		contentPane.add(bBadge);
 		contentPane.add(bMap);
@@ -299,14 +311,18 @@ public class MainMenu extends JFrame {
 		lblBadgesHere.setBounds(430, 31, 72, 14);
 		contentPane.add(lblBadgesHere);
 		
-		JTextArea txtrTest = new JTextArea();
-		txtrTest.setText("test");
-		txtrTest.setBounds(327, 113, 277, 243);
-		contentPane.add(txtrTest);
+		JTextArea exerciseTextArea = new JTextArea();
+		exerciseTextArea.setWrapStyleWord(true);
+		exerciseTextArea.setEditable(false);
+		exerciseTextArea.setToolTipText("The current mission to unlock the Boss Room!");
+		exerciseTextArea.setBounds(327, 113, 277, 243);
+		contentPane.add(exerciseTextArea);
 		
-		JTextArea txtrTest_1 = new JTextArea();
-		txtrTest_1.setText("test2");
-		txtrTest_1.setBounds(327, 390, 277, 243);
-		contentPane.add(txtrTest_1);
+		JTextArea questTextArea = new JTextArea();
+		questTextArea.setToolTipText("Contains the current quests from a previous report.");
+		questTextArea.setWrapStyleWord(true);
+		questTextArea.setEditable(false);
+		questTextArea.setBounds(327, 390, 277, 243);
+		contentPane.add(questTextArea);
 	}
 }

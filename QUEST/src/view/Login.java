@@ -136,7 +136,7 @@ public class Login extends JFrame {
 								stmt = (Statement) conn.createStatement();
 
 								String query = "SELECT * FROM users " +
-										"WHERE U_Usn ='" + username + "' AND U_Pas ='" + password + "'";
+											   "WHERE U_Usn ='" + username + "' AND U_Pas ='" + password + "'";
 
 								ResultSet rs = stmt.executeQuery(query);
 
@@ -159,9 +159,12 @@ public class Login extends JFrame {
 									set.setType(tp);
 									set.setArea(ar);
 
+									//System.out.println("testing");
+									
 									//moving windows
 									if (tp == 0) {
 										MainMenu frame = new MainMenu(set);
+										//MainMenu frame = new MainMenu(set);
 										frame.setVisible(true);
 										dispose();
 									}
