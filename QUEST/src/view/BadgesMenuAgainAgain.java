@@ -17,11 +17,14 @@ import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,6 +34,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 
 public class BadgesMenuAgainAgain {
@@ -56,6 +60,7 @@ public class BadgesMenuAgainAgain {
 
 	/**
 	 * Create the application.
+	 * @wbp.parser.entryPoint
 	 */
 	public BadgesMenuAgainAgain(User user) {
 		this.user = user;
@@ -70,10 +75,19 @@ public class BadgesMenuAgainAgain {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		frame.setVisible(true);
 		JPanel panel = new JPanel();
 		
 		JScrollPane scrollPane = new JScrollPane();
+		
+		JButton btnReturn = new JButton("Return");
+		btnReturn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				MainMenu mainFrame = new MainMenu(user);
+				mainFrame.setVisible(true);
+				frame.dispose();
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -81,7 +95,8 @@ public class BadgesMenuAgainAgain {
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
-						.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE))
+						.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
+						.addComponent(btnReturn))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -91,8 +106,13 @@ public class BadgesMenuAgainAgain {
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(40, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnReturn)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
+		
+		JLabel label = new JLabel(new ImageIcon(getClass().getResource("/img/badgestitle.png")));
+		panel.add(label);
 		
 		JPanel panel_1 = new JPanel();
 		
@@ -108,7 +128,7 @@ public class BadgesMenuAgainAgain {
 		try {
 			System.out.print("test");
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT A_num, A_Ttl, A_Msg, A_Bdg FROM achievements WHERE A_Num != 0 AND A_Bdg != 0");
 			while(rs.next()){
@@ -180,11 +200,13 @@ public class BadgesMenuAgainAgain {
 			
 			ttlArr[i] = new JLabel(badgeList.get(i).getBadgeTitle());
 			ttlArr[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+			//ttlArr[i].setBorder(new EmptyBorder(10, 10, 10, 10));
 			panel_1.add(ttlArr[i]);
+			panel_1.add(Box.createRigidArea(new Dimension(0, 10)));
 			
-			dscArr[i] = new JLabel(badgeList.get(i).getBadgeDisc());
-			dscArr[i].setAlignmentX(Component.CENTER_ALIGNMENT);
-			panel_1.add(dscArr[i]);
+			//dscArr[i] = new JLabel(badgeList.get(i).getBadgeDisc());
+			//dscArr[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+			//panel_1.add(dscArr[i]);
 		}
 		
 		
