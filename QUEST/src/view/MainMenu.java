@@ -237,7 +237,7 @@ public class MainMenu extends JFrame {
 		bBadge.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{
-					BadgesMenuAgain badgeFrame = new BadgesMenuAgain(user);
+					BadgesMenuAgainAgain badgeFrame = new BadgesMenuAgainAgain(user);
 					dispose();
 					
 				}
