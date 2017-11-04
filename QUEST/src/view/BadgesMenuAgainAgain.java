@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import net.miginfocom.swing.MigLayout;
+
 
 public class BadgesMenuAgainAgain {
 
@@ -83,6 +83,10 @@ public class BadgesMenuAgainAgain {
 		
 		scrollPane.setViewportView(panel_1);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
+		
+		JButton btnNewButton = new JButton("New button");
+		btnNewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		panel_1.add(btnNewButton);
 		frame.getContentPane().setLayout(groupLayout);
 	}
 }
