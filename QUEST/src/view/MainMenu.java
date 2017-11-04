@@ -37,6 +37,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
 
 public class MainMenu extends JFrame {
 
@@ -187,13 +189,14 @@ public class MainMenu extends JFrame {
 		
 		//JOptionPane.showMessageDialog(null, u + " " + p + " " + ac + " " + pt);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 705, 760);
+		setBounds(100, 100, 630, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		
 		JButton bRandomTest = new JButton("");
+		bRandomTest.setBounds(5, 502, 246, 90);
 		bRandomTest.setIcon(new ImageIcon(MainMenu.class.getResource("/boss-transparent-small.png")));
 		bRandomTest.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		bRandomTest.addActionListener(new ActionListener() {
@@ -210,30 +213,8 @@ public class MainMenu extends JFrame {
 			}
 		});
 		
-		JButton bQuests = new JButton("");
-		bQuests.setIcon(new ImageIcon(MainMenu.class.getResource("/quest-transparent-small.png")));
-		bQuests.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					//moving windows
-					fp = JOptionPane.showInputDialog("Please input the source code location");
-					if ((fp == null) || (fp.length() < 0) || !(new File(fp).exists())) {
-						JOptionPane.showMessageDialog(null, "The source code does not exist!");
-					}
-					else {
-						QuestMenu Qframe = new QuestMenu(user, fp);
-						//tframe.initialize(user);
-						dispose();
-					}
-				} 
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		bQuests.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		
 		JButton bLeaderboards = new JButton("");
+		bLeaderboards.setBounds(5, 300, 246, 90);
 		bLeaderboards.setIcon(new ImageIcon(MainMenu.class.getResource("/rank-transparent-small.png")));
 		bLeaderboards.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		bLeaderboards.addActionListener(new ActionListener() {
@@ -251,6 +232,7 @@ public class MainMenu extends JFrame {
 		});
 		
 		JButton bBadge = new JButton("");
+		bBadge.setBounds(5, 401, 246, 90);
 		bBadge.setIcon(new ImageIcon(MainMenu.class.getResource("/badges-transparent-small.png")));
 		bBadge.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -267,6 +249,7 @@ public class MainMenu extends JFrame {
 		bBadge.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		JButton btnNewButton = new JButton("");
+		btnNewButton.setBounds(5, 199, 246, 90);
 		btnNewButton.setIcon(new ImageIcon(MainMenu.class.getResource("/compile-transparent-small.png")));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -283,73 +266,47 @@ public class MainMenu extends JFrame {
 			}
 		});
 		
-		JLabel titleLabel = new JLabel("");
-		titleLabel.setIcon(new ImageIcon(MainMenu.class.getResource("/title-transparent-small.png")));
-		
 		String userName = user.getUsername();
 		JLabel lblName = new JLabel("Name: " + user.getUsername());
+		lblName.setBounds(15, 16, 218, 32);
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
 		String userLvl = Integer.toString(user.getPoints() / 100);
-		JLabel lblLevel = new JLabel("Level: " + (user.getPoints() / 100) + 1);
-		lblLevel.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
 		String userPts = Integer.toString(user.getPoints());
-		JLabel lblPts = new JLabel("Pts: " + user.getPoints()%100 + " / 100");
-		lblPts.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblName)
-								.addComponent(lblLevel)
-								.addComponent(lblPts)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(218)
-							.addComponent(titleLabel))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(41)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(bQuests, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(bBadge, GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(bLeaderboards, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(bRandomTest, GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.RELATED, 10, Short.MAX_VALUE)))
-					.addGap(18))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(203)
-					.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
-					.addGap(209))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(10)
-					.addComponent(titleLabel)
-					.addGap(18)
-					.addComponent(lblName)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblLevel)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblPts)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(bRandomTest, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-						.addComponent(bQuests, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(bLeaderboards, GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-						.addComponent(bBadge, GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
-					.addGap(18)
-					.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-					.addGap(37))
-		);
-		contentPane.setLayout(gl_contentPane);
+		
+		JLabel lblArea = new JLabel("Area:");
+		lblArea.setBounds(15, 59, 62, 32);
+		lblArea.setFont(new Font("Tahoma", Font.PLAIN, 26));
+		
+		JButton bMap = new JButton("");
+		bMap.setBounds(5, 102, 246, 90);
+		bMap.setIcon(new ImageIcon(MainMenu.class.getResource("/res/mapsmall.png")));
+		bMap.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		contentPane.setLayout(null);
+		contentPane.add(lblName);
+		contentPane.add(lblArea);
+		contentPane.add(bRandomTest);
+		contentPane.add(btnNewButton);
+		contentPane.add(bLeaderboards);
+		contentPane.add(bBadge);
+		contentPane.add(bMap);
+		
+		JLabel lblBadgesHere = new JLabel("badges here");
+		lblBadgesHere.setBounds(430, 31, 72, 14);
+		contentPane.add(lblBadgesHere);
+		
+		JTextArea txtrTest = new JTextArea();
+		txtrTest.setText("test");
+		txtrTest.setBounds(327, 113, 277, 243);
+		contentPane.add(txtrTest);
+		
+		JTextArea txtrTest_1 = new JTextArea();
+		txtrTest_1.setText("test2");
+		txtrTest_1.setBounds(327, 390, 277, 243);
+		contentPane.add(txtrTest_1);
 	}
 }
