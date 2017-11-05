@@ -128,7 +128,7 @@ public class ErrorPolling {
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT UQ_Num, Q_Num FROM userquests " +
-							   "WHERE U_Num = " + user.getUserNumber() + " AND UQ_Pth = " + filePath + " AND UQ_Clr == 0";
+							   "WHERE U_Num = " + user.getUserNumber() + " AND UQ_Pth = " + filePath + " AND UQ_Clr = 0";
 			
 				ResultSet res = stmt.executeQuery(check);
 				
