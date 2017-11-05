@@ -135,10 +135,56 @@ public class ResultMenu {
 					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 					stmt = (Statement) conn.createStatement();
 					
+					/**
+					 * Boss cleared badges, if they clear the boss it is inserted into the database.
+					 */
+					
+					int emblem = 19;
+					switch (user.getArea()) {
+						case 1: emblem = 19; break;
+						case 2: emblem = 24; break;
+						case 3: emblem = 20; break;
+						case 4: emblem = 21; break;
+						case 5: emblem = 22; break;
+						case 6: emblem = 23; break;
+						case 7: emblem = 25; break;
+					}
+					
+					String bossclear = "INSERT INTO userachievements (U_Num, A_Num) " +
+									   "VALUES ('" + user.getUserNumber() + "', '" + emblem + "')" +
+									   "ON DUPLICATE KEY UPDATE U_Num = U_Num"; 
+
+					stmt.executeUpdate(bossclear);
+					
+					/**
+					 * This next snippet is to check whether or not they have cleared all the areas
+					 * within the game. This is done by checking if the amount of achievements between
+					 * and including 19 and 25 is 7.
+					 */
+					
+					String areatest = "SELECT * " +
+							   		  "FROM userachievements " +
+							   		  "WHERE U_Num = " + user.getUserNumber() + " AND A_Num > 18 AND A_Num < 26";
+	
+					ResultSet at = stmt.executeQuery(areatest);
+					
+					int row = 0;
+					if (at.next()) {
+						row = at.getInt(1);
+					}
+					
+					if (row >= 7) {
+						String areaclear = "INSERT INTO userachievements (U_Num, A_Num) " +
+								   		   "VALUES ('" + user.getUserNumber() + "', '26')" +
+								           "ON DUPLICATE KEY UPDATE U_Num = U_Num"; 
+
+						stmt.executeUpdate(areaclear);
+					}
+					
 					String testquery = "SELECT * " +
 									   "FROM userachievements " +
-									   "WHERE U_Num = " + user.getUserNumber() + " AND A_Num = " + ach;
-					
+							           "WHERE U_Num = " + user.getUserNumber() + " AND A_Num = " + ach;
+			
 					ResultSet achievements = stmt.executeQuery(testquery);
 					
 					if (achievements.next()) {
@@ -158,8 +204,8 @@ public class ResultMenu {
 					} 
 					else {
 						String query = "UPDATE users " +
-								   "SET U_Pts = U_Pts + " + pts + " AND U_Ach = U_Ach + 1 " +
-							       "WHERE U_Num = " + user.getUserNumber() + " ";
+								   	   "SET U_Pts = U_Pts + " + pts + " AND U_Ach = U_Ach + 1 " +
+							           "WHERE U_Num = " + user.getUserNumber() + " ";
 
 						stmt.executeUpdate(query);
 						

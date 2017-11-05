@@ -57,6 +57,8 @@ public class MainMenu extends JFrame {
 	private String[] questTitle = {"", "", "", "", ""};
 	private boolean newarea = false;
 	private String areapass = "";
+	private int emblem = 0;
+	private int emblemcheck = 0;
 	
 	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	static SecureRandom rnd = new SecureRandom();
@@ -96,6 +98,7 @@ public class MainMenu extends JFrame {
 		switch (user.getArea()) {
 			case 1: 
 				// Varisland
+				emblem = 19;
 				fp = "./exercises/" + user.getUsername() + "-e1.c";
 				if (new File("./exercises/" + user.getUsername() + "-e1.c").exists()) {
 					//do nothing
@@ -115,6 +118,7 @@ public class MainMenu extends JFrame {
 				break;
 			case 2:
 				// Syntown
+				emblem = 24;
 				fp = "./exercises/" + user.getUsername() + "-e2.c";
 				if (new File("./exercises/" + user.getUsername() + "-e2.c").exists()) {
 					//do nothing
@@ -133,6 +137,7 @@ public class MainMenu extends JFrame {
 				break;
 			case 3:
 				// Inoutown
+				emblem = 20;
 				fp = "./exercises/" + user.getUsername() + "-e3.c";
 				if (new File("./exercises/" + user.getUsername() + "-e3.c").exists()) {
 					//do nothing
@@ -151,6 +156,7 @@ public class MainMenu extends JFrame {
 				break;
 			case 4:
 				// Elsif Village
+				emblem = 21;
 				fp = "./exercises/" + user.getUsername() + "-e4.c";
 				if (new File("./exercises/" + user.getUsername() + "-e4.c").exists()) {
 					//do nothing
@@ -169,6 +175,7 @@ public class MainMenu extends JFrame {
 				break;
 			case 5:
 				// Looping Meadows
+				emblem = 22;
 				fp = "./exercises/" + user.getUsername() + "-e5.c";
 				if (new File("./exercises/" + user.getUsername() + "-e5.c").exists()) {
 					//do nothing
@@ -187,6 +194,7 @@ public class MainMenu extends JFrame {
 				break;
 			case 6:
 				// City of No Return
+				emblem = 23;
 				fp = "./exercises/" + user.getUsername() + "-e6.c";
 				if (new File("./exercises/" + user.getUsername() + "-e6.c").exists()) {
 					//do nothing
@@ -205,8 +213,42 @@ public class MainMenu extends JFrame {
 				break;
 			case 7:
 				// tower preparations
+				emblem = 24;
 				break;
 				
+		}
+		
+		/**
+		 * Check the db if the person has already cleared the boss room, if they have change the text
+		 * that appears on it
+		 */
+		
+		try {
+			Connection conn = null;
+			Statement stmt = null;
+
+			try {
+				Class.forName("com.mysql.jdbc.Driver");	        
+
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				stmt = (Statement) conn.createStatement();
+
+				String check = "SELECT * FROM userachievements " +
+							   "WHERE U_Num = " + user.getUserNumber() + " AND A_Num = '" + emblem + "'";
+			
+				ResultSet res = stmt.executeQuery(check);
+				
+				if (res.next()) {
+					emblemcheck = res.getInt(1);
+				}
+			} 
+			catch(Exception a) {
+				System.out.println(a.getMessage());	    	
+				JOptionPane.showMessageDialog(null, "A database error occured.");
+			}	
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		/**
@@ -304,9 +346,60 @@ public class MainMenu extends JFrame {
 		bRandomTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
+					ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/key.png"));
 					if (question.getCleared() == 0) {
-						ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/key.png"));
-						JOptionPane.showMessageDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
+						
+						//JOptionPane.showMessageDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
+						
+						Object[] choices = {"Input Password", "Skip on Password"};
+						String input = (String) JOptionPane.showInputDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!\n...you can also input the password if you have it.", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon, null, "");
+						
+						if (input != null && input.equals(question.getAreaPassword())) {
+							
+							/**
+							 * Change the user to have completed the exercise in the model and db, and have them
+							 * challenge the boss
+							 */
+							
+							try {
+								Connection conn = null;
+								Statement stmt = null;
+
+								try {
+									Class.forName("com.mysql.jdbc.Driver");	        
+
+									conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+									stmt = (Statement) conn.createStatement();
+
+									String check = "UPDATE userareas " +
+												   "SET UA_Clr = 1 " +
+										           "WHERE U_Num = '" + user.getUserNumber() + "' AND E_Num = '" + question.getExercise() + "'";
+									
+									stmt.executeUpdate(check);
+								} 
+								catch(Exception a) {
+									System.out.println(a.getMessage());	    	
+									JOptionPane.showMessageDialog(null, "A database error occured.");
+								}	
+							}
+							catch (Exception e) {
+								e.printStackTrace();
+							}
+							
+							JOptionPane.showMessageDialog(null, "The Boss Room is unlocked! Proceed to challenge the boss now!", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
+							
+							question.setCleared(1);
+							//moving windows
+							TestMenu tframe = new TestMenu(user, question);
+							//tframe.initialize(user);
+							dispose();
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "The Boss Door doesn't budge.", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
+						}
+					}
+					else if (emblemcheck >= 1) {
+						JOptionPane.showMessageDialog(null, "The Boss Room is empty...", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
 					}
 					else {
 						//moving windows
@@ -430,6 +523,9 @@ public class MainMenu extends JFrame {
 		//Exercise text area to display the current mission, if not cleared
 		if (question.getCleared() == 0) {
 			exerciseTextArea.setText("Main Quest:\n" + question.getMessage());
+		}
+		else if (emblemcheck >= 1) {
+			exerciseTextArea.setText("The Boss Room has been cleared! Move on to the next area!");
 		}
 		else {
 			exerciseTextArea.setText("The Boss Room has been unlocked! Go for the challenge!");

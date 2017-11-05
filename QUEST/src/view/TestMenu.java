@@ -72,17 +72,7 @@ public class TestMenu {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 441);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		switch (user.getArea()) {
-			case 1: break;
-			case 2: break;
-			case 3: break;
-			case 4: break;
-			case 5: break;
-			case 6: break;
-			case 7: break;
-		}
-		
+
 		try {
 			Connection conn = null;
 			Statement stmt = null;
@@ -94,7 +84,7 @@ public class TestMenu {
 				stmt = (Statement) conn.createStatement();
 
 				String query = "SELECT * FROM tests " +
-							   "WHERE A_Num !='0' " +
+							   "WHERE A_Num != '0' AND AR_Num = '" + user.getArea() + "' " +
 						       "ORDER BY RAND() " +
 						       "LIMIT 1";
 				
