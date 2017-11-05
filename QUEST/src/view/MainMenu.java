@@ -47,6 +47,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 
 public class MainMenu extends JFrame {
 
@@ -230,7 +231,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userachievements " +
@@ -262,7 +263,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userquests " +
@@ -312,7 +313,7 @@ public class MainMenu extends JFrame {
 				try {
 					Class.forName("com.mysql.jdbc.Driver");	        
 
-					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 					stmt = (Statement) conn.createStatement();
 
 					String check = "INSERT INTO userareas (UA_Pas, UA_Clr, E_Num, U_Num)" +
@@ -368,7 +369,7 @@ public class MainMenu extends JFrame {
 								try {
 									Class.forName("com.mysql.jdbc.Driver");	        
 
-									conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+									conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 									stmt = (Statement) conn.createStatement();
 
 									String check = "UPDATE userareas " +
@@ -494,9 +495,13 @@ public class MainMenu extends JFrame {
 		
 		JButton bMap = new JButton("");
 		bMap.setBounds(25, 124, 244, 90);
-		bMap.setIcon(new ImageIcon(MainMenu.class.getResource("/mapsmall.png")));
+		bMap.setIcon(new ImageIcon(MainMenu.class.getResource("/img/mapsmall.png")));
 		bMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+				WorldMap newView = new WorldMap(user, question);
+				dispose();
+				
 			}
 		});
 		contentPane.setLayout(null);
@@ -507,10 +512,6 @@ public class MainMenu extends JFrame {
 		contentPane.add(bLeaderboards);
 		contentPane.add(bBadge);
 		contentPane.add(bMap);
-		
-		JLabel lblBadgesHere = new JLabel("badges here");
-		lblBadgesHere.setBounds(430, 31, 72, 14);
-		contentPane.add(lblBadgesHere);
 		
 		JTextArea exerciseTextArea = new JTextArea();
 		exerciseTextArea.setLineWrap(true);
@@ -538,6 +539,28 @@ public class MainMenu extends JFrame {
 		questTextArea.setEditable(false);
 		questTextArea.setBounds(311, 254, 277, 372);
 		contentPane.add(questTextArea);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(311, 16, 277, 75);
+		contentPane.add(scrollPane);
+		
+		//adding badge to scrollpane
+		
+		
+		//end adding badge to scrollpane
+		
+		JPanel panel = new JPanel();
+		scrollPane.setViewportView(panel);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 275, Short.MAX_VALUE)
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 57, Short.MAX_VALUE)
+		);
+		panel.setLayout(gl_panel);
 		
 		//Quest text area to display the current quests, if not cleared
 		if (quests.equals("")) {
