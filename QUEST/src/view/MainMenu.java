@@ -7,6 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
+
 import api.component.PCompiler;
 import controller.ErrorPolling;
 import model.Exercises;
@@ -26,6 +29,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JLabel;
@@ -36,6 +40,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JTextField;
@@ -45,6 +51,9 @@ public class MainMenu extends JFrame {
 
 	private JPanel contentPane;
 	private String fp = "";
+	private String quests = "";
+	private String[] questMessage = {"", "", "", "", ""};
+	private String[] questTitle = {"", "", "", "", ""};
 	
 	/**
 	 * Launch the application.
@@ -83,7 +92,44 @@ public class MainMenu extends JFrame {
 				// Varisland
 				fp = "./exercises/" + user.getUsername() + "-e1.c";
 				if (new File("./exercises/" + user.getUsername() + "-e1.c").exists()) {
-					//do nothing
+					//fetch quests from the db if there are any
+					try {
+						Connection conn = null;
+						Statement stmt = null;
+
+						try {
+							Class.forName("com.mysql.jdbc.Driver");	        
+
+							conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+							stmt = (Statement) conn.createStatement();
+
+							String check = "SELECT * FROM userquests " +
+										   "WHERE U_Num = " + user.getUserNumber() + " AND UQ_Pth = '" + fp + "' AND UQ_Clr = 0";
+						
+							ResultSet res = stmt.executeQuery(check);
+							
+							int counter = 0;
+							
+							if (res.next()) {
+								int rows = res.getInt(1);
+								questTitle[counter] = res.getString("UQ_Qnm");
+								questMessage[counter] = res.getString("UQ_Pnm");
+								counter++;
+							}
+							
+							for (int i = 0; i < counter; i++) {
+								quests = questTitle[i] + ":\n" + questMessage[i] + "\n\n";
+							}
+							
+						} 
+						catch(Exception a) {
+							System.out.println(a.getMessage());	    	
+							JOptionPane.showMessageDialog(null, "A database error occured.");
+						}	
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				else {
 					try {
@@ -203,10 +249,16 @@ public class MainMenu extends JFrame {
 		bRandomTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					//moving windows
-					TestMenu tframe = new TestMenu(user, question);
-					//tframe.initialize(user);
-					dispose();
+					if (question.getCleared() == 0) {
+						ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/key.png"));
+						JOptionPane.showMessageDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
+					}
+					else {
+						//moving windows
+						TestMenu tframe = new TestMenu(user, question);
+						//tframe.initialize(user);
+						dispose();
+					}
 				} 
 				catch (Exception e) {
 					e.printStackTrace();
@@ -329,10 +381,19 @@ public class MainMenu extends JFrame {
 		}
 		
 		JTextArea questTextArea = new JTextArea();
+		questTextArea.setLineWrap(true);
 		questTextArea.setToolTipText("Contains the current quests from a previous report.");
 		questTextArea.setWrapStyleWord(true);
 		questTextArea.setEditable(false);
 		questTextArea.setBounds(311, 254, 277, 372);
 		contentPane.add(questTextArea);
+		
+		//Quest text area to display the current quests, if not cleared
+		if (quests.equals("")) {
+			questTextArea.setText("Sub Quests:\n\nThere are no sub-quests to do!");
+		}
+		else {
+			questTextArea.setText("Sub Quests:\n\n" + quests);
+		}
 	}
 }
