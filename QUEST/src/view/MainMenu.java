@@ -332,6 +332,78 @@ public class MainMenu extends JFrame {
 			}
 		}
 		
+		/**
+		 * Changing areas and getting the information about the area from the database
+		 */
+		
+		try {
+			Connection conn = null;
+			Statement stmt = null;
+
+			try {
+				Class.forName("com.mysql.jdbc.Driver");	        
+
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				stmt = (Statement) conn.createStatement();
+
+				String check = "SELECT * FROM exercises " +
+				        	   "WHERE AR_Num = " + user.getArea() + " ";
+				
+				ResultSet d = stmt.executeQuery(check);
+				
+				int en = 1;
+				
+				if (d.next()) {
+					int rows = d.getInt(1);
+					en = d.getInt("E_Num");
+				}
+				
+				String query = "SELECT * FROM userareas " +
+				        	   "WHERE U_Num = " + user.getUserNumber() + " AND E_Num = " + en + " ";
+				
+				ResultSet ex = stmt.executeQuery(query);
+				
+				int cleared = 0;
+				String areapass = "AAAAAAAAAA";
+				
+				if (ex.next()) {
+					int rows = ex.getInt(1);
+					cleared = ex.getInt("UA_Clr");
+					areapass = ex.getString("UA_Pas");
+				}
+				
+				System.out.println("clear = " + cleared);
+				
+				query = "SELECT * FROM exercises " +
+				        "WHERE E_Num = " + en + " ";
+				
+				ResultSet res = stmt.executeQuery(query);
+				
+				String ins = "";
+				
+				if (res.next()) {
+					int rows = res.getInt(1);
+					ins = res.getString("E_Ins");
+				}
+				
+				question.setExercise(en);
+				question.setMessage(ins);
+				question.setArea(user.getArea());
+				question.setCleared(cleared);
+				question.setAreaPassword(areapass);
+				
+				System.out.println("update! = " + question.getCleared());
+				
+			} 
+			catch(Exception a) {
+				System.out.println(a.getMessage());	    	
+				JOptionPane.showMessageDialog(null, "A database error occured.");
+			}	
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		//JOptionPane.showMessageDialog(null, u + " " + p + " " + ac + " " + pt);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 630, 700);
@@ -522,6 +594,9 @@ public class MainMenu extends JFrame {
 		contentPane.add(exerciseTextArea);
 		
 		//Exercise text area to display the current mission, if not cleared
+		
+		System.out.println(question.getCleared());
+		
 		if (question.getCleared() == 0) {
 			exerciseTextArea.setText("Main Quest:\n" + question.getMessage());
 		}

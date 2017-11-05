@@ -67,8 +67,8 @@ public class WorldMap {
 		PreparedStatement stmt = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");
-			stmt = conn.prepareStatement("UPDATE users SET U_Are = ? WHERE U_Num = ?");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");
+			stmt = conn.prepareStatement("UPDATE users SET AR_Num = ? WHERE U_Num = ?");
 			stmt.setObject(1, areaNum);
 			stmt.setObject(2, user.getUserNumber());
 			stmt.executeUpdate();
@@ -138,7 +138,7 @@ public class WorldMap {
 		areaBtn_2.setBorderPainted(false);
 		areaBtn_2.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0){
-				JOptionPane.showMessageDialog(null, "testing");
+				//JOptionPane.showMessageDialog(null, "testing");
 				changeMap(2);
 			}
 		});
