@@ -40,6 +40,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.Arrays;
@@ -54,6 +55,10 @@ public class MainMenu extends JFrame {
 	private String quests = "";
 	private String[] questMessage = {"", "", "", "", ""};
 	private String[] questTitle = {"", "", "", "", ""};
+	private boolean newarea = false;
+	
+	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	static SecureRandom rnd = new SecureRandom();
 	
 	/**
 	 * Launch the application.
@@ -92,44 +97,7 @@ public class MainMenu extends JFrame {
 				// Varisland
 				fp = "./exercises/" + user.getUsername() + "-e1.c";
 				if (new File("./exercises/" + user.getUsername() + "-e1.c").exists()) {
-					//fetch quests from the db if there are any
-					try {
-						Connection conn = null;
-						Statement stmt = null;
-
-						try {
-							Class.forName("com.mysql.jdbc.Driver");	        
-
-							conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
-							stmt = (Statement) conn.createStatement();
-
-							String check = "SELECT * FROM userquests " +
-										   "WHERE U_Num = " + user.getUserNumber() + " AND UQ_Pth = '" + fp + "' AND UQ_Clr = 0";
-						
-							ResultSet res = stmt.executeQuery(check);
-							
-							int counter = 0;
-							
-							if (res.next()) {
-								int rows = res.getInt(1);
-								questTitle[counter] = res.getString("UQ_Qnm");
-								questMessage[counter] = res.getString("UQ_Pnm");
-								counter++;
-							}
-							
-							for (int i = 0; i < counter; i++) {
-								quests = questTitle[i] + ":\n" + questMessage[i] + "\n\n";
-							}
-							
-						} 
-						catch(Exception a) {
-							System.out.println(a.getMessage());	    	
-							JOptionPane.showMessageDialog(null, "A database error occured.");
-						}	
-					}
-					catch (Exception e) {
-						e.printStackTrace();
-					}
+					//do nothing
 				}
 				else {
 					try {
@@ -141,6 +109,7 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
+					newarea = true;
 				}
 				break;
 			case 2:
@@ -158,6 +127,7 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
+					newarea = true;
 				}
 				break;
 			case 3:
@@ -175,6 +145,7 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
+					newarea = true;
 				}
 				break;
 			case 4:
@@ -192,6 +163,7 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
+					newarea = true;
 				}
 				break;
 			case 5:
@@ -209,6 +181,7 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
+					newarea = true;
 				}
 				break;
 			case 6:
@@ -226,12 +199,55 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
+					newarea = true;
 				}
 				break;
 			case 7:
 				// tower preparations
 				break;
 				
+		}
+		
+		/**
+		 * Fetch a list of quests if there exists any within the db
+		 */
+		
+		try {
+			Connection conn = null;
+			Statement stmt = null;
+
+			try {
+				Class.forName("com.mysql.jdbc.Driver");	        
+
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				stmt = (Statement) conn.createStatement();
+
+				String check = "SELECT * FROM userquests " +
+							   "WHERE U_Num = " + user.getUserNumber() + " AND UQ_Pth = '" + fp + "' AND UQ_Clr = 0";
+			
+				ResultSet res = stmt.executeQuery(check);
+				
+				int counter = 0;
+				
+				if (res.next()) {
+					int rows = res.getInt(1);
+					questTitle[counter] = res.getString("UQ_Qnm");
+					questMessage[counter] = res.getString("UQ_Pnm");
+					counter++;
+				}
+				
+				for (int i = 0; i < counter; i++) {
+					quests = questTitle[i] + ":\n" + questMessage[i] + "\n\n";
+				}
+				
+			} 
+			catch(Exception a) {
+				System.out.println(a.getMessage());	    	
+				JOptionPane.showMessageDialog(null, "A database error occured.");
+			}	
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		//JOptionPane.showMessageDialog(null, u + " " + p + " " + ac + " " + pt);
