@@ -124,7 +124,7 @@ public class ErrorPolling {
 				
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT UQ_Num, Q_Num FROM userquests " +
@@ -173,7 +173,7 @@ public class ErrorPolling {
 							try {
 								Class.forName("com.mysql.jdbc.Driver");	        
 
-								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 								stmt = (Statement) conn.createStatement();
 
 								String solve = "UPDATE userquests" +
@@ -219,7 +219,7 @@ public class ErrorPolling {
 					try {
 						Class.forName("com.mysql.jdbc.Driver");	        
 
-						conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+						conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 						stmt = (Statement) conn.createStatement();
 
 						/**

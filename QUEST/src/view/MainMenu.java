@@ -231,7 +231,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userachievements " +
@@ -263,7 +263,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userquests " +
@@ -313,7 +313,7 @@ public class MainMenu extends JFrame {
 				try {
 					Class.forName("com.mysql.jdbc.Driver");	        
 
-					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 					stmt = (Statement) conn.createStatement();
 
 					String check = "INSERT INTO userareas (UA_Pas, UA_Clr, E_Num, U_Num)" +
@@ -343,7 +343,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM exercises " +
@@ -441,7 +441,7 @@ public class MainMenu extends JFrame {
 								try {
 									Class.forName("com.mysql.jdbc.Driver");	        
 
-									conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+									conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
 									stmt = (Statement) conn.createStatement();
 
 									String check = "UPDATE userareas " +
@@ -629,7 +629,7 @@ public class MainMenu extends JFrame {
 		ArrayList<JButton> btnArr = new ArrayList<>();
 		
 		try {
-			bConn = DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");
+			bConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");
 			bStmt = bConn.createStatement();
 			ResultSet bRs = bStmt.executeQuery("SELECT A_num, A_Ttl, A_Msg, A_Bdg FROM achievements WHERE A_Num != 0 AND A_Bdg != 0");
 			while(bRs.next()){
@@ -649,7 +649,6 @@ public class MainMenu extends JFrame {
 			while(rs2.next()){
 				int achID = rs2.getInt("A_Num");
 				for(int i = 0; i < badgeList.size(); i++){
-					
 					if(achID == badgeList.get(i).getBadgeNum()){
 						badgeList.get(i).setAcquired(true);
 						break;
@@ -673,12 +672,12 @@ public class MainMenu extends JFrame {
 				case 3: urlString = "/img/gold-tb.png"; break;
 				}
 				System.out.print("badgetest");
-				//JButton bdgButton = new JButton(new ImageIcon(getClass().getResource(urlString)));
-				//bdgButton.setToolTipText(badgeList.get(i).getBadgeTitle() + ": " + badgeList.get(i).getBadgeDisc());
-				//bdgPanel.add(bdgButton);
-				btnArr.add(new JButton(new ImageIcon(getClass().getResource(urlString))));
-				btnArr.get(i).setToolTipText(badgeList.get(i).getBadgeTitle() + ": " + badgeList.get(i).getBadgeDisc());
-				bdgPanel.add(btnArr.get(i));
+				JButton bdgButton = new JButton(new ImageIcon(getClass().getResource(urlString)));
+				bdgButton.setToolTipText(badgeList.get(i).getBadgeTitle() + ": " + badgeList.get(i).getBadgeDisc());
+				bdgPanel.add(bdgButton);
+				//btnArr.add(new JButton(new ImageIcon(getClass().getResource(urlString))));
+				//btnArr.get(i).setToolTipText(badgeList.get(i).getBadgeTitle() + ": " + badgeList.get(i).getBadgeDisc());
+				//bdgPanel.add(btnArr.get(i));
 			}
 		}
 		
