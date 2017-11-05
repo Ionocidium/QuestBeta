@@ -56,6 +56,7 @@ public class MainMenu extends JFrame {
 	private String[] questMessage = {"", "", "", "", ""};
 	private String[] questTitle = {"", "", "", "", ""};
 	private boolean newarea = false;
+	private String areapass = "";
 	
 	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	static SecureRandom rnd = new SecureRandom();
@@ -248,6 +249,44 @@ public class MainMenu extends JFrame {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		/**
+		 * If it's a new area, we generate a boss password for it and save it into the userareas table
+		 */
+		
+		if (newarea == true) {
+			StringBuilder sb = new StringBuilder(10);
+			for( int i = 0; i < 10; i++ ) {
+				sb.append(AB.charAt(rnd.nextInt(AB.length())));
+			}
+			areapass = sb.toString();
+			question.setAreaPassword(areapass);
+			
+			try {
+				Connection conn = null;
+				Statement stmt = null;
+
+				try {
+					Class.forName("com.mysql.jdbc.Driver");	        
+
+					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+					stmt = (Statement) conn.createStatement();
+
+					String check = "INSERT INTO userareas (UA_Pas, UA_Clr, E_Num, U_Num)" +
+						     	   "VALUES ('" + areapass + "', '" + 0 + "', '" + user.getArea() + "', '" + user.getUserNumber() + "')";
+					
+					stmt.executeUpdate(check);
+					
+				} 
+				catch(Exception a) {
+					System.out.println(a.getMessage());	    	
+					JOptionPane.showMessageDialog(null, "A database error occured.");
+				}	
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		//JOptionPane.showMessageDialog(null, u + " " + p + " " + ac + " " + pt);

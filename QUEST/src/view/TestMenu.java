@@ -73,6 +73,16 @@ public class TestMenu {
 		frame.setBounds(100, 100, 450, 441);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		switch (user.getArea()) {
+			case 1: break;
+			case 2: break;
+			case 3: break;
+			case 4: break;
+			case 5: break;
+			case 6: break;
+			case 7: break;
+		}
+		
 		try {
 			Connection conn = null;
 			Statement stmt = null;

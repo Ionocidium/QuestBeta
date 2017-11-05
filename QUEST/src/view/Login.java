@@ -169,11 +169,13 @@ public class Login extends JFrame {
 									
 									int en = 1;
 									int cleared = 0;
+									String areapass = "AAAAAAAAAA";
 									
 									if (ex.next()) {
 										rows = ex.getInt(1);
 										en = ex.getInt("E_Num");
 										cleared = ex.getInt("UA_Clr");
+										areapass = ex.getString("UA_Pas");
 									}
 									
 									query = "SELECT * FROM exercises " +
@@ -193,6 +195,7 @@ public class Login extends JFrame {
 									question.setMessage(ins);
 									question.setArea(ar);
 									question.setCleared(cleared);
+									question.setAreaPassword(areapass);
 									
 									//moving windows
 									if (tp == 0) {
