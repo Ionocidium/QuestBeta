@@ -76,7 +76,9 @@ public class BadgesMenuAgainAgain {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setTitle("Badges");
 		frame.setBounds(100, 100, 450, 400);
+		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		JPanel panel = new JPanel();

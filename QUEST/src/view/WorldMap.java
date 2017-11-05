@@ -39,8 +39,8 @@ public class WorldMap {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WorldMap window = new WorldMap();
-					window.frame.setVisible(true);
+					//WorldMap window = new WorldMap();
+					//window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -99,6 +99,8 @@ public class WorldMap {
 	}
 	private void initialize() {
 		frame = new JFrame();
+		frame.setTitle("World Map");
+		frame.setResizable(false);
 		frame.setBounds(100, 100, 645, 585);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
