@@ -197,7 +197,7 @@ public class MainMenu extends JFrame {
 		
 		
 		JButton bRandomTest = new JButton("");
-		bRandomTest.setBounds(5, 502, 246, 90);
+		bRandomTest.setBounds(23, 536, 246, 90);
 		bRandomTest.setIcon(new ImageIcon(MainMenu.class.getResource("/boss-transparent-small.png")));
 		bRandomTest.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		bRandomTest.addActionListener(new ActionListener() {
@@ -215,7 +215,7 @@ public class MainMenu extends JFrame {
 		});
 		
 		JButton bLeaderboards = new JButton("");
-		bLeaderboards.setBounds(5, 300, 246, 90);
+		bLeaderboards.setBounds(23, 330, 246, 90);
 		bLeaderboards.setIcon(new ImageIcon(MainMenu.class.getResource("/rank-transparent-small.png")));
 		bLeaderboards.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		bLeaderboards.addActionListener(new ActionListener() {
@@ -233,7 +233,7 @@ public class MainMenu extends JFrame {
 		});
 		
 		JButton bBadge = new JButton("");
-		bBadge.setBounds(5, 401, 246, 90);
+		bBadge.setBounds(23, 433, 246, 90);
 		bBadge.setIcon(new ImageIcon(MainMenu.class.getResource("/badges-transparent-small.png")));
 		bBadge.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -250,7 +250,7 @@ public class MainMenu extends JFrame {
 		bBadge.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		JButton bCompile = new JButton("");
-		bCompile.setBounds(5, 199, 246, 90);
+		bCompile.setBounds(23, 227, 246, 90);
 		bCompile.setIcon(new ImageIcon(MainMenu.class.getResource("/compile-transparent-small.png")));
 		bCompile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -293,7 +293,7 @@ public class MainMenu extends JFrame {
 		lblArea.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
 		JButton bMap = new JButton("");
-		bMap.setBounds(5, 102, 246, 90);
+		bMap.setBounds(25, 124, 244, 90);
 		bMap.setIcon(new ImageIcon(MainMenu.class.getResource("/mapsmall.png")));
 		bMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -313,15 +313,16 @@ public class MainMenu extends JFrame {
 		contentPane.add(lblBadgesHere);
 		
 		JTextArea exerciseTextArea = new JTextArea();
+		exerciseTextArea.setLineWrap(true);
 		exerciseTextArea.setWrapStyleWord(true);
 		exerciseTextArea.setEditable(false);
 		exerciseTextArea.setToolTipText("The current mission to unlock the Boss Room!");
-		exerciseTextArea.setBounds(327, 113, 277, 243);
+		exerciseTextArea.setBounds(311, 113, 277, 121);
 		contentPane.add(exerciseTextArea);
 		
 		//Exercise text area to display the current mission, if not cleared
 		if (question.getCleared() == 0) {
-			exerciseTextArea.setText(question.getMessage());
+			exerciseTextArea.setText("Main Quest:\n" + question.getMessage());
 		}
 		else {
 			exerciseTextArea.setText("The Boss Room has been unlocked! Go for the challenge!");
@@ -331,7 +332,7 @@ public class MainMenu extends JFrame {
 		questTextArea.setToolTipText("Contains the current quests from a previous report.");
 		questTextArea.setWrapStyleWord(true);
 		questTextArea.setEditable(false);
-		questTextArea.setBounds(327, 390, 277, 243);
+		questTextArea.setBounds(311, 254, 277, 372);
 		contentPane.add(questTextArea);
 	}
 }
