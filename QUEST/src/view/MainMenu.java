@@ -7,11 +7,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
+
 
 import api.component.PCompiler;
 import controller.ErrorPolling;
+import model.Badges;
 import model.Exercises;
 import model.User;
 
@@ -41,13 +41,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import java.sql.*;
 
 public class MainMenu extends JFrame {
 
@@ -231,7 +231,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userachievements " +
@@ -263,7 +263,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userquests " +
@@ -313,7 +313,7 @@ public class MainMenu extends JFrame {
 				try {
 					Class.forName("com.mysql.jdbc.Driver");	        
 
-					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 					stmt = (Statement) conn.createStatement();
 
 					String check = "INSERT INTO userareas (UA_Pas, UA_Clr, E_Num, U_Num)" +
@@ -369,7 +369,7 @@ public class MainMenu extends JFrame {
 								try {
 									Class.forName("com.mysql.jdbc.Driver");	        
 
-									conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+									conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 									stmt = (Statement) conn.createStatement();
 
 									String check = "UPDATE userareas " +
@@ -544,23 +544,73 @@ public class MainMenu extends JFrame {
 		scrollPane.setBounds(311, 16, 277, 75);
 		contentPane.add(scrollPane);
 		
+		JPanel bdgPanel = new JPanel();
+		scrollPane.setViewportView(bdgPanel);
+		bdgPanel.setLayout(new BoxLayout(bdgPanel, BoxLayout.X_AXIS));
 		//adding badge to scrollpane
+		Connection bConn = null;
+		Statement bStmt = null;
+		ArrayList<Badges> badgeList = new ArrayList<>();
+		ArrayList<JButton> btnArr = new ArrayList<>();
+		
+		try {
+			bConn = DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");
+			bStmt = bConn.createStatement();
+			ResultSet bRs = bStmt.executeQuery("SELECT A_num, A_Ttl, A_Msg, A_Bdg FROM achievements WHERE A_Num != 0 AND A_Bdg != 0");
+			while(bRs.next()){
+				Badges bdg = new Badges();
+				bdg.setBadgeNum(bRs.getInt("A_num"));
+				bdg.setBadgeTitle(bRs.getString("A_Ttl"));
+				bdg.setBadgeDisc(bRs.getString("A_Msg"));
+				bdg.setBadgeType(bRs.getInt("A_bdg"));
+				//bdg.setBadgeIcon("res/no-badge.png");
+				badgeList.add(bdg);
+			}
+			
+			PreparedStatement st = bConn.prepareStatement("SELECT A_Num FROM userachievements WHERE U_num = ?");
+			st.setObject(1, user.getUserNumber());
+			ResultSet rs2 = st.executeQuery();
+			
+			while(rs2.next()){
+				int achID = rs2.getInt("A_Num");
+				for(int i = 0; i < badgeList.size(); i++){
+					
+					if(achID == badgeList.get(i).getBadgeNum()){
+						badgeList.get(i).setAcquired(true);
+						break;
+					}
+				}
+			}
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		for(int i = 0; i < badgeList.size(); i++){
+			
+			if(badgeList.get(i).isAcquired()){
+				
+				String urlString = "";
+				switch(badgeList.get(i).getBadgeType()){
+				case 1: urlString = "/img/bronze-tb.png"; break;
+				case 2: urlString = "/img/silver-tb.png"; break;
+				case 3: urlString = "/img/gold-tb.png"; break;
+				}
+				System.out.print("badgetest");
+				//JButton bdgButton = new JButton(new ImageIcon(getClass().getResource(urlString)));
+				//bdgButton.setToolTipText(badgeList.get(i).getBadgeTitle() + ": " + badgeList.get(i).getBadgeDisc());
+				//bdgPanel.add(bdgButton);
+				btnArr.add(new JButton(new ImageIcon(getClass().getResource(urlString))));
+				btnArr.get(i).setToolTipText(badgeList.get(i).getBadgeTitle() + ": " + badgeList.get(i).getBadgeDisc());
+				bdgPanel.add(btnArr.get(i));
+			}
+		}
 		
 		
 		//end adding badge to scrollpane
 		
-		JPanel panel = new JPanel();
-		scrollPane.setViewportView(panel);
-		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 275, Short.MAX_VALUE)
-		);
-		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 57, Short.MAX_VALUE)
-		);
-		panel.setLayout(gl_panel);
+		
 		
 		//Quest text area to display the current quests, if not cleared
 		if (quests.equals("")) {
