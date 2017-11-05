@@ -272,15 +272,15 @@ public class MainMenu extends JFrame {
 				
 				int counter = 0;
 				
-				if (res.next()) {
-					int rows = res.getInt(1);
+				while (res.next()) {
+					//int rows = res.getInt(1);
 					questTitle[counter] = res.getString("UQ_Qnm");
 					questMessage[counter] = res.getString("UQ_Pnm");
 					counter++;
 				}
 				
 				for (int i = 0; i < counter; i++) {
-					quests = questTitle[i] + ":\n" + questMessage[i] + "\n\n";
+					quests = quests + "(" + (i+1) + ") " + questTitle[i] + ":\n" + questMessage[i] + "\n\n";
 				}
 				
 			} 
@@ -497,6 +497,10 @@ public class MainMenu extends JFrame {
 		bMap.setIcon(new ImageIcon(MainMenu.class.getResource("/mapsmall.png")));
 		bMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//moving windows
+				WorldMap wframe = new WorldMap(user, question);
+				//tframe.initialize(user);
+				dispose();
 			}
 		});
 		contentPane.setLayout(null);
