@@ -105,7 +105,7 @@ public class WorldMap {
 		frame.setBounds(100, 100, 645, 585);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+		frame.setVisible(true);
 		JPanel panel = new JPanel();
 		panel.setBounds(10, 25, 609, 467);
 		frame.getContentPane().add(panel);
