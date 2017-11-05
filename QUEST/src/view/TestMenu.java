@@ -19,6 +19,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import model.Answer;
+import model.Exercises;
 import model.Test;
 import model.User;
 
@@ -52,8 +53,8 @@ public class TestMenu {
 
 	
 	
-	public TestMenu(User user) {
-		initialize(user);
+	public TestMenu(User user, Exercises question) {
+		initialize(user, question);
 	}
 
 	/**
@@ -61,7 +62,7 @@ public class TestMenu {
 	 * 
 	 * 
 	 */
-	public void initialize(User user) {
+	public void initialize(User user, Exercises question) {
 		String ttl = "";
 		String cod = "";
 		int pts = 0;
@@ -159,7 +160,7 @@ public class TestMenu {
 						try {
 							Answer man = new Answer(textField.getText());
 							//moving windows
-							ResultMenu rm = new ResultMenu(user, ptest, man, des, pt, ach);
+							ResultMenu rm = new ResultMenu(user, ptest, man, des, pt, ach, question);
 							//rm.initialize(user, ptest, man);
 							frame.dispose();
 						} 

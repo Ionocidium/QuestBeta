@@ -11,6 +11,7 @@ import com.alee.laf.WebLookAndFeel;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import model.Exercises;
 import model.User;
 import view.MainMenu;
 
@@ -132,14 +133,14 @@ public class Login extends JFrame {
 							try {
 								Class.forName("com.mysql.jdbc.Driver");	        
 
-								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 								stmt = (Statement) conn.createStatement();
 
 								String query = "SELECT * FROM users " +
 											   "WHERE U_Usn ='" + username + "' AND U_Pas ='" + password + "'";
 
 								ResultSet rs = stmt.executeQuery(query);
-
+								
 								if (rs.next()) {
 									int rows = rs.getInt(1); 
 									int num = rs.getInt("U_Num");
@@ -148,7 +149,7 @@ public class Login extends JFrame {
 									int ac = rs.getInt("U_Ach");
 									int pt = rs.getInt("U_Pts");
 									int tp = rs.getInt("U_Typ");
-									int ar = rs.getInt("U_Are");
+									int ar = rs.getInt("AR_Num");
 
 									User set = new User();
 									set.setUserNumber(num);
@@ -159,11 +160,43 @@ public class Login extends JFrame {
 									set.setType(tp);
 									set.setArea(ar);
 
-									//System.out.println("testing");
+									//obtaining exercises
+									
+									query = "SELECT * FROM userareas " +
+									        "WHERE U_Num = " + num + " ";
+									
+									ResultSet ex = stmt.executeQuery(query);
+									
+									int en = 1;
+									int cleared = 0;
+									
+									if (ex.next()) {
+										rows = ex.getInt(1);
+										en = ex.getInt("E_Num");
+										cleared = ex.getInt("UA_Clr");
+									}
+									
+									query = "SELECT * FROM exercises " +
+									        "WHERE E_Num = " + en + " ";
+									
+									ResultSet res = stmt.executeQuery(query);
+									
+									String ins = "";
+									
+									if (res.next()) {
+										rows = res.getInt(1);
+										ins = res.getString("E_Ins");
+									}
+									
+									Exercises question = new Exercises();
+									question.setExercise(en);
+									question.setMessage(ins);
+									question.setArea(ar);
+									question.setCleared(cleared);
 									
 									//moving windows
 									if (tp == 0) {
-										MainMenu frame = new MainMenu(set);
+										MainMenu frame = new MainMenu(set, question);
 										//MainMenu frame = new MainMenu(set);
 										frame.setVisible(true);
 										dispose();

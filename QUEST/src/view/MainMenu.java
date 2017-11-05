@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import api.component.PCompiler;
 import controller.ErrorPolling;
+import model.Exercises;
 import model.User;
 
 import java.awt.Window.Type;
@@ -64,11 +65,11 @@ public class MainMenu extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainMenu(User user) {
-		initialize(user);
+	public MainMenu(User user, Exercises question) {
+		initialize(user, question);
 	}
 	
-	public void initialize(User user) {
+	public void initialize(User user, Exercises question) {
 		setTitle("Main Menu");
 		
 		/**
@@ -203,7 +204,7 @@ public class MainMenu extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					//moving windows
-					TestMenu tframe = new TestMenu(user);
+					TestMenu tframe = new TestMenu(user, question);
 					//tframe.initialize(user);
 					dispose();
 				} 
@@ -221,7 +222,7 @@ public class MainMenu extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					//moving windows
-					LeaderboardMenu Lframe = new LeaderboardMenu(user);
+					LeaderboardMenu Lframe = new LeaderboardMenu(user, question);
 					//tframe.initialize(user);
 					dispose();
 				} 
@@ -237,7 +238,7 @@ public class MainMenu extends JFrame {
 		bBadge.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{
-					BadgesMenuAgainAgain badgeFrame = new BadgesMenuAgainAgain(user);
+					BadgesMenuAgainAgain badgeFrame = new BadgesMenuAgainAgain(user, question);
 					dispose();
 					
 				}
@@ -317,6 +318,14 @@ public class MainMenu extends JFrame {
 		exerciseTextArea.setToolTipText("The current mission to unlock the Boss Room!");
 		exerciseTextArea.setBounds(327, 113, 277, 243);
 		contentPane.add(exerciseTextArea);
+		
+		//Exercise text area to display the current mission, if not cleared
+		if (question.getCleared() == 0) {
+			exerciseTextArea.setText(question.getMessage());
+		}
+		else {
+			exerciseTextArea.setText("The Boss Room has been unlocked! Go for the challenge!");
+		}
 		
 		JTextArea questTextArea = new JTextArea();
 		questTextArea.setToolTipText("Contains the current quests from a previous report.");

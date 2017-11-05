@@ -15,6 +15,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import model.Answer;
+import model.Exercises;
 import model.Test;
 import model.User;
 
@@ -45,13 +46,13 @@ public class ResultMenu {
 	/**
 	 * @wbp.parser.entryPoint
 	 */
-	public ResultMenu(User user, Test test, Answer answer, String des, int pts, int ach) {
-		initialize(user, test, answer, des, pts, ach);
+	public ResultMenu(User user, Test test, Answer answer, String des, int pts, int ach, Exercises question) {
+		initialize(user, test, answer, des, pts, ach, question);
 	}
 
 
 	@SuppressWarnings("null")
-	public void initialize(User user, Test test, Answer answer, String des, int pts, int ach) {
+	public void initialize(User user, Test test, Answer answer, String des, int pts, int ach, Exercises question) {
 
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 554);
@@ -75,7 +76,7 @@ public class ResultMenu {
 					public void run() {
 						try {
 							//moving windows
-							MainMenu mm = new MainMenu(user);
+							MainMenu mm = new MainMenu(user, question);
 							mm.setVisible(true);
 							frame.dispose();
 						} 

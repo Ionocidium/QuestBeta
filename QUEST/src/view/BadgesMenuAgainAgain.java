@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 
 import model.Badges;
+import model.Exercises;
 import model.User;
 
 import javax.swing.JPanel;
@@ -41,6 +42,7 @@ public class BadgesMenuAgainAgain {
 
 	private JFrame frame;
 	private User user;
+	private Exercises question;
 
 	/**
 	 * Launch the application.
@@ -62,8 +64,9 @@ public class BadgesMenuAgainAgain {
 	 * Create the application.
 	 * @wbp.parser.entryPoint
 	 */
-	public BadgesMenuAgainAgain(User user) {
+	public BadgesMenuAgainAgain(User user , Exercises question) {
 		this.user = user;
+		this.question = question;
 		initialize();
 		
 	}
@@ -83,7 +86,7 @@ public class BadgesMenuAgainAgain {
 		JButton btnReturn = new JButton("Return");
 		btnReturn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				MainMenu mainFrame = new MainMenu(user);
+				MainMenu mainFrame = new MainMenu(user, question);
 				mainFrame.setVisible(true);
 				frame.dispose();
 			}

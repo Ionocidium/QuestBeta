@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import model.Exercises;
 import model.User;
 
 import javax.swing.ImageIcon;
@@ -47,14 +48,14 @@ public class LeaderboardMenu {
 	 * Create the application.
 	 * @wbp.parser.entryPoint
 	 */
-	public LeaderboardMenu(User user) {
-		initialize(user);
+	public LeaderboardMenu(User user, Exercises question) {
+		initialize(user, question);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(User user) {
+	private void initialize(User user, Exercises question) {
 		int bottom = 0;
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
@@ -223,7 +224,7 @@ public class LeaderboardMenu {
 					public void run() {
 						try {
 							//moving windows
-							MainMenu mm = new MainMenu(user);
+							MainMenu mm = new MainMenu(user, question);
 							mm.setVisible(true);
 							frame.dispose();
 						} 
