@@ -231,7 +231,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userachievements " +
@@ -263,7 +263,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userquests " +
@@ -313,14 +313,20 @@ public class MainMenu extends JFrame {
 				try {
 					Class.forName("com.mysql.jdbc.Driver");	        
 
-					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 					stmt = (Statement) conn.createStatement();
 
-					String check = "INSERT INTO userareas (UA_Pas, UA_Clr, E_Num, U_Num)" +
-						     	   "VALUES ('" + areapass + "', '" + 0 + "', '" + user.getArea() + "', '" + user.getUserNumber() + "')";
+					String query = "SELECT * FROM userareas" +
+								   "WHERE E_Num = " + question.getExercise() + " ";
 					
-					stmt.executeUpdate(check);
+					ResultSet rs = stmt.executeQuery(query);
 					
+					if (rs.next()) {
+						String check = "INSERT INTO userareas (UA_Pas, UA_Clr, E_Num, U_Num)" +
+						     	   	   "VALUES ('" + areapass + "', '" + 0 + "', '" + question.getExercise() + "', '" + user.getUserNumber() + "')";
+					
+						stmt.executeUpdate(check);
+					}
 				} 
 				catch(Exception a) {
 					System.out.println(a.getMessage());	    	
@@ -343,7 +349,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM exercises " +
@@ -372,7 +378,7 @@ public class MainMenu extends JFrame {
 					areapass = ex.getString("UA_Pas");
 				}
 				
-				System.out.println("clear = " + cleared);
+				//System.out.println("clear = " + cleared);
 				
 				query = "SELECT * FROM exercises " +
 				        "WHERE E_Num = " + en + " ";
@@ -392,7 +398,7 @@ public class MainMenu extends JFrame {
 				question.setCleared(cleared);
 				question.setAreaPassword(areapass);
 				
-				System.out.println("update! = " + question.getCleared());
+				//System.out.println("update! = " + question.getCleared());
 				
 			} 
 			catch(Exception a) {
@@ -441,7 +447,7 @@ public class MainMenu extends JFrame {
 								try {
 									Class.forName("com.mysql.jdbc.Driver");	        
 
-									conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+									conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 									stmt = (Statement) conn.createStatement();
 
 									String check = "UPDATE userareas " +
@@ -530,8 +536,10 @@ public class MainMenu extends JFrame {
 				try {
 					PCompiler cmp = new PCompiler();
 					Path filePath = Paths.get(fp);
-					String log = cmp.compileRun(filePath);
-					ErrorPolling ep = new ErrorPolling(log, user, fp);
+					//JOptionPane.showMessageDialog(null, fp);
+					String elog = cmp.compileRun(filePath);
+					//JOptionPane.showMessageDialog(null, elog);
+					ErrorPolling ep = new ErrorPolling(elog, user, fp);
 					//System.out.println(log);
 				}
 				catch(Exception x){
@@ -595,7 +603,7 @@ public class MainMenu extends JFrame {
 		
 		//Exercise text area to display the current mission, if not cleared
 		
-		System.out.println(question.getCleared());
+		//System.out.println(question.getCleared());
 		
 		if (question.getCleared() == 0) {
 			exerciseTextArea.setText("Main Quest:\n" + question.getMessage());
@@ -629,7 +637,7 @@ public class MainMenu extends JFrame {
 		ArrayList<JButton> btnArr = new ArrayList<>();
 		
 		try {
-			bConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");
+			bConn = DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");
 			bStmt = bConn.createStatement();
 			ResultSet bRs = bStmt.executeQuery("SELECT A_num, A_Ttl, A_Msg, A_Bdg FROM achievements WHERE A_Num != 0 AND A_Bdg != 0");
 			while(bRs.next()){
@@ -671,7 +679,7 @@ public class MainMenu extends JFrame {
 				case 2: urlString = "/img/silver-tb.png"; break;
 				case 3: urlString = "/img/gold-tb.png"; break;
 				}
-				System.out.print("badgetest");
+				//System.out.print("badgetest");
 				JButton bdgButton = new JButton(new ImageIcon(getClass().getResource(urlString)));
 				bdgButton.setToolTipText(badgeList.get(i).getBadgeTitle() + ": " + badgeList.get(i).getBadgeDisc());
 				bdgPanel.add(bdgButton);
