@@ -134,7 +134,7 @@ public class ErrorPolling {
 				
 				int counter = 0;
 				
-				if (res.next()) {
+				while (res.next()) {
 					int rows = res.getInt(1);
 					questNum[counter] = res.getInt("UQ_Num");
 					questTyp[counter] = res.getInt("Q_Num");
