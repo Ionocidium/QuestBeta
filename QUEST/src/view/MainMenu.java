@@ -662,7 +662,7 @@ public class MainMenu extends JFrame {
 		questTextArea.setToolTipText("Contains the current quests from a previous report.");
 		questTextArea.setWrapStyleWord(true);
 		questTextArea.setEditable(false);
-		questTextArea.setBounds(311, 254, 277, 372);
+		questTextArea.setBounds(311, 254, 277, 335);
 		contentPane.add(questTextArea);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -672,6 +672,11 @@ public class MainMenu extends JFrame {
 		JPanel bdgPanel = new JPanel();
 		scrollPane.setViewportView(bdgPanel);
 		bdgPanel.setLayout(new BoxLayout(bdgPanel, BoxLayout.X_AXIS));
+		
+		JLabel lblTip = new JLabel("<html>Tip: <font face=\"Tahoma\" size=\"3\">Exercises are located in the <b>program folder/exercises</b> folder (ex. QUESTBeta/exercises).</font></html>");
+		lblTip.setFont(new Font("3Dventure", Font.PLAIN, 20));
+		lblTip.setBounds(311, 589, 289, 51);
+		contentPane.add(lblTip);
 		//adding badge to scrollpane
 		Connection bConn = null;
 		Statement bStmt = null;
