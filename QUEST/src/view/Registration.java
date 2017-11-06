@@ -45,7 +45,7 @@ public class Registration extends JFrame {
 	private JPanel contentPane;
 	private JTextField fNum;
 	private JLabel lLogin;
-	private JPasswordField fPassword;
+	private JTextField fPassword;
 	private JButton btnNewButton;
 
 	/**
@@ -108,7 +108,7 @@ public class Registration extends JFrame {
 
 		JLabel lPassword = new JLabel("Password");
 
-		lLogin = new JLabel("QUEST - Registration");
+		lLogin = new JLabel("Registration");
 		lLogin.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
 		JButton btnConfirm = new JButton("Register");
@@ -120,7 +120,7 @@ public class Registration extends JFrame {
 						try {
 							
 							String username = fNum.getText();
-							String password = String.valueOf(fPassword.getPassword());
+							String password = fPassword.getText();
 							System.out.print(password);
 
 							Connection conn = null;
@@ -156,7 +156,7 @@ public class Registration extends JFrame {
 			}
 		});
 		
-		fPassword = new JPasswordField();
+		fPassword = new JTextField();
 		
 		btnNewButton = new JButton("Return");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -178,44 +178,45 @@ public class Registration extends JFrame {
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(61)
+					.addComponent(btnNewButton)
+					.addPreferredGap(ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+					.addComponent(btnConfirm)
+					.addGap(60))
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(30)
+					.addContainerGap(110, Short.MAX_VALUE)
+					.addComponent(lLogin)
+					.addGap(108))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(42)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnNewButton)
-							.addPreferredGap(ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-							.addComponent(btnConfirm))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lNum)
-								.addComponent(lPassword))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(fPassword, GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-								.addComponent(fNum, GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(17)
-							.addComponent(lLogin)))
-					.addGap(73))
+						.addComponent(lPassword)
+						.addComponent(lNum))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(fNum, GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+						.addComponent(fPassword, GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
+					.addGap(38))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(22)
+					.addGap(21)
 					.addComponent(lLogin)
-					.addGap(34)
+					.addGap(36)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lNum)
 						.addComponent(fNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lPassword)
-						.addComponent(fPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(40)
+						.addComponent(fPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lPassword))
+					.addGap(39)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnNewButton)
-						.addComponent(btnConfirm, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(35, Short.MAX_VALUE))
+						.addComponent(btnConfirm, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(23, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
