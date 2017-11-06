@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -169,11 +170,13 @@ public class ResultMenu {
 					ResultSet at = stmt.executeQuery(areatest);
 					
 					int row = 0;
-					if (at.next()) {
+					int count = 0;
+					while (at.next()) {
 						row = at.getInt(1);
+						count++;
 					}
 					
-					if (row >= 7) {
+					if (count >= 7) {
 						String areaclear = "INSERT INTO userachievements (U_Num, A_Num) " +
 								   		   "VALUES ('" + user.getUserNumber() + "', '26')" +
 								           "ON DUPLICATE KEY UPDATE U_Num = U_Num"; 
@@ -239,11 +242,14 @@ public class ResultMenu {
 		}
 		else {
 			JTextArea txtrVerdictArea = new JTextArea();
-			txtrVerdictArea.setText(test.getIncorrect());
+			txtrVerdictArea.setText("You've gotten the question incorrect, try again!");
 			txtrVerdictArea.setLineWrap(true);
 			txtrVerdictArea.setWrapStyleWord(true);
 			txtrVerdictArea.setEditable(false);
 			scrollPane_1.setViewportView(txtrVerdictArea);
+			
+			txtrCodeArea.setText("");
+			txtrCodeArea.setBackground(Color.gray);
 		}
 		
 	}

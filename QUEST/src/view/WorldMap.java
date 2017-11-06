@@ -63,6 +63,7 @@ public class WorldMap {
 	 */
 	private void changeMap(int areaNum){
 		user.setArea(areaNum);
+		//JOptionPane.showMessageDialog(null, "area number: " + areaNum);
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {

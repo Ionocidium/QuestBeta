@@ -105,6 +105,7 @@ public class MainMenu extends JFrame {
 					//do nothing
 				}
 				else {
+					newarea = true;
 					try {
 						new File("./exercises").mkdir();
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
@@ -114,7 +115,6 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
-					newarea = true;
 				}
 				break;
 			case 2:
@@ -125,6 +125,7 @@ public class MainMenu extends JFrame {
 					//do nothing
 				}
 				else {
+					newarea = true;
 					try {
 						List<String> lines = Arrays.asList("int main () {", "\tint number = 9", "}");
 						Path file = Paths.get("./exercises/" + user.getUsername() + "-e2.c");
@@ -133,7 +134,6 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
-					newarea = true;
 				}
 				break;
 			case 3:
@@ -144,6 +144,7 @@ public class MainMenu extends JFrame {
 					//do nothing
 				}
 				else {
+					newarea = true;
 					try {
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
 						Path file = Paths.get("./exercises/" + user.getUsername() + "-e3.c");
@@ -152,7 +153,6 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
-					newarea = true;
 				}
 				break;
 			case 4:
@@ -163,6 +163,7 @@ public class MainMenu extends JFrame {
 					//do nothing
 				}
 				else {
+					newarea = true;
 					try {
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
 						Path file = Paths.get("./exercises/" + user.getUsername() + "-e4.c");
@@ -171,7 +172,6 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
-					newarea = true;
 				}
 				break;
 			case 5:
@@ -182,6 +182,7 @@ public class MainMenu extends JFrame {
 					//do nothing
 				}
 				else {
+					newarea = true;
 					try {
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
 						Path file = Paths.get("./exercises/" + user.getUsername() + "-e5.c");
@@ -190,7 +191,6 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
-					newarea = true;
 				}
 				break;
 			case 6:
@@ -201,6 +201,7 @@ public class MainMenu extends JFrame {
 					//do nothing
 				}
 				else {
+					newarea = true;
 					try {
 						List<String> lines = Arrays.asList("int main () {", "\t", "}");
 						Path file = Paths.get("./exercises/" + user.getUsername() + "-e6.c");
@@ -209,7 +210,6 @@ public class MainMenu extends JFrame {
 					catch (IOException e){
 						e.printStackTrace();
 					}
-					newarea = true;
 				}
 				break;
 			case 7:
@@ -218,6 +218,43 @@ public class MainMenu extends JFrame {
 				break;
 				
 		}
+		
+		/**
+		 * Check the db if the person has a file for some reason, but no entry in the db, create
+		 * an entry if that happens
+		 */
+		
+		try {
+			Connection conn = null;
+			Statement stmt = null;
+
+			try {
+				Class.forName("com.mysql.jdbc.Driver");	        
+
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				stmt = (Statement) conn.createStatement();
+
+				String check = "SELECT * FROM userareas " +
+							   "WHERE U_Num = " + user.getUserNumber() + " AND E_Num = '" + question.getExercise() + "'";
+			
+				ResultSet res = stmt.executeQuery(check);
+				
+				if (res.next()) {
+					
+				}
+				else {
+					newarea = true;
+				}
+			} 
+			catch(Exception a) {
+				System.out.println(a.getMessage());	    	
+				JOptionPane.showMessageDialog(null, "A database error occured.");
+			}	
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		
 		/**
 		 * Check the db if the person has already cleared the boss room, if they have change the text
@@ -299,6 +336,7 @@ public class MainMenu extends JFrame {
 		 */
 		
 		if (newarea == true) {
+			//JOptionPane.showMessageDialog(null,  "this is a new area: " + question.getExercise());
 			StringBuilder sb = new StringBuilder(10);
 			for( int i = 0; i < 10; i++ ) {
 				sb.append(AB.charAt(rnd.nextInt(AB.length())));
@@ -316,14 +354,18 @@ public class MainMenu extends JFrame {
 					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 					stmt = (Statement) conn.createStatement();
 
-					String query = "SELECT * FROM userareas" +
-								   "WHERE E_Num = " + question.getExercise() + " ";
+					//JOptionPane.showMessageDialog(null, user.getArea());
 					
-					ResultSet rs = stmt.executeQuery(query);
+					String test = "SELECT * FROM exercises " +
+								  "WHERE AR_Num = " + user.getArea() + " ";
+					
+					ResultSet rs = stmt.executeQuery(test);
 					
 					if (rs.next()) {
-						String check = "INSERT INTO userareas (UA_Pas, UA_Clr, E_Num, U_Num)" +
-						     	   	   "VALUES ('" + areapass + "', '" + 0 + "', '" + question.getExercise() + "', '" + user.getUserNumber() + "')";
+						question.setExercise(rs.getInt("E_Num"));
+		
+						String check = "INSERT INTO userareas (UA_Pas, E_Num, U_Num)" +
+						     	   	   "VALUES ('" + areapass + "', '" + question.getExercise() + "', '" + user.getUserNumber() + "')";
 					
 						stmt.executeUpdate(check);
 					}
