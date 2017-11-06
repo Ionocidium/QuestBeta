@@ -24,6 +24,7 @@ import model.Test;
 import model.User;
 
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 public class TestMenu {
 
@@ -70,7 +71,7 @@ public class TestMenu {
 		Test test = new Test();
 				
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 441);
+		frame.setBounds(100, 100, 450, 570);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		try {
@@ -127,11 +128,11 @@ public class TestMenu {
 		panel.setLayout(null);
 		
 		JLabel lblDescription = new JLabel("Description: ");
-		lblDescription.setBounds(10, 24, 89, 14);
+		lblDescription.setBounds(10, 184, 89, 14);
 		panel.add(lblDescription);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 115, 414, 168);
+		scrollPane.setBounds(10, 279, 414, 168);
 		panel.add(scrollPane);
 		
 		JTextArea txtrCodeArea = new JTextArea();
@@ -140,11 +141,11 @@ public class TestMenu {
 		scrollPane.setViewportView(txtrCodeArea);
 		
 		JLabel lblAnswer = new JLabel("Answer: ");
-		lblAnswer.setBounds(10, 309, 67, 14);
+		lblAnswer.setBounds(10, 458, 67, 14);
 		panel.add(lblAnswer);
 		
 		textField = new JTextField();
-		textField.setBounds(87, 306, 337, 20);
+		textField.setBounds(87, 455, 337, 20);
 		panel.add(textField);
 		textField.setColumns(10);
 		
@@ -171,11 +172,11 @@ public class TestMenu {
 				});
 			}
 		});
-		btnSubmit.setBounds(335, 368, 89, 23);
+		btnSubmit.setBounds(335, 497, 89, 23);
 		panel.add(btnSubmit);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 49, 414, 59);
+		scrollPane_1.setBounds(10, 209, 414, 59);
 		panel.add(scrollPane_1);
 		
 		JTextArea txtrDescriptionArea = new JTextArea();
@@ -184,5 +185,10 @@ public class TestMenu {
 		txtrDescriptionArea.setWrapStyleWord(true);
 		txtrDescriptionArea.setEditable(false);
 		scrollPane_1.setViewportView(txtrDescriptionArea);
+		
+		JLabel bossImg = new JLabel("");
+		bossImg.setIcon(new ImageIcon(TestMenu.class.getResource("/img/boss.png")));
+		bossImg.setBounds(125, 26, 198, 144);
+		panel.add(bossImg);
 	}
 }
