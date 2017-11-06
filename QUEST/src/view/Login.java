@@ -257,15 +257,15 @@ public class Login extends JFrame {
 						.addComponent(lLogin)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnNewButton)
 								.addComponent(lNum)
 								.addComponent(lPassword))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(fPassword, Alignment.LEADING)
-									.addComponent(fNum, Alignment.LEADING, 160, 160, Short.MAX_VALUE))
-								.addComponent(btnConfirm))))
+							.addGap(28)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(fPassword, Alignment.LEADING)
+								.addComponent(fNum, Alignment.LEADING, 160, 160, Short.MAX_VALUE)
+								.addGroup(Alignment.LEADING, gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(btnConfirm, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
 					.addGap(54))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -282,10 +282,10 @@ public class Login extends JFrame {
 						.addComponent(lPassword)
 						.addComponent(fPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnNewButton)
-						.addComponent(btnConfirm))
-					.addContainerGap(52, Short.MAX_VALUE))
+					.addComponent(btnConfirm)
+					.addGap(17)
+					.addComponent(btnNewButton)
+					.addContainerGap(27, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
