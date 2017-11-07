@@ -107,9 +107,9 @@ public class ErrorPolling {
 		
 		int[] errorTyp = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0, 0, 20, 0, 21};
 		
-		int[] questNum = {0, 0, 0, 0, 0};
-		int[] questTyp = {0, 0, 0, 0, 0};
-		boolean[] questClr = {false, false, false, false, false};
+		int[] questNum = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		int[] questTyp = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		boolean[] questClr = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 		
 		/** 
 		 * gets data from the db regarding the state of quests the current program has
@@ -124,11 +124,11 @@ public class ErrorPolling {
 				
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT UQ_Num, Q_Num FROM userquests " +
-							   "WHERE U_Num = " + user.getUserNumber() + " AND UQ_Pth = " + filePath + " AND UQ_Clr = 0";
+							   "WHERE U_Num = " + user.getUserNumber() + " AND UQ_Pth = '" + filePath + "' AND UQ_Clr = 0";
 			
 				ResultSet res = stmt.executeQuery(check);
 				
@@ -173,14 +173,14 @@ public class ErrorPolling {
 							try {
 								Class.forName("com.mysql.jdbc.Driver");	        
 
-								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 								stmt = (Statement) conn.createStatement();
 
-								String solve = "UPDATE userquests" +
-											   "SET U_Clr = 1" +
-											   "WHERE U_Num = " + user.getUserNumber() + " AND UQ_Pth = " + filePath + " AND UQ_Num = " + questNum[j];
+								String solve = "UPDATE userquests " +
+											   "SET UQ_Clr = 1 " +
+											   "WHERE U_Num = " + user.getUserNumber() + " AND UQ_Pth = '" + filePath + "' AND UQ_Num = " + questNum[j];
 							
-								stmt.executeQuery(solve);
+								stmt.executeUpdate(solve);
 								
 								String userup = "UPDATE users " +
 										   	    "SET U_Pts = U_Pts + " + 20 + " " +
@@ -219,18 +219,17 @@ public class ErrorPolling {
 					try {
 						Class.forName("com.mysql.jdbc.Driver");	        
 
-						conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");	
+						conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 						stmt = (Statement) conn.createStatement();
 
 						/**
 						 * obtains the number of quests already generated for the user for a specific program
-						 * if it's equal to 5, no more quests are generated and the loop is broken
 						 */
 						
 						int rows = 0;
 						
 						String query = "SELECT count(U_Num) FROM userquests " +
-									   "WHERE U_Num = " + user.getUserNumber() + " AND  UQ_Path = " + filePath + " ";
+									   "WHERE U_Num = " + user.getUserNumber() + " AND  UQ_Pth = '" + filePath + "'";
 						
 						ResultSet rs = stmt.executeQuery(query);
 						
@@ -238,9 +237,9 @@ public class ErrorPolling {
 							rows = rs.getInt(1);
 						}
 						
-						if (rows >= 5) {
-							break;
-						}
+						//if (rows >= 5) {
+						//	break;
+						//}
 						
 						/**
 						 * the program proceeds to check if there is already a quest associated with the current
@@ -262,8 +261,7 @@ public class ErrorPolling {
 						}
 						
 						/**
-						 * if the amount of quests are less than 5, we generate one quest, but first we access
-						 * the quest db for the corresponding error
+						 * we generate one quest, but first we access the quest db for the corresponding error
 						 * if there is a quest of the same type available, then we do not need to create a new
 						 * one for the quest
 						 */
@@ -325,7 +323,7 @@ public class ErrorPolling {
 			JOptionPane.showMessageDialog(null, "You have completed quest(s)!");
 		}
 		else {
-			JOptionPane.showMessageDialog(null, "Nice! No errors found!");
+			JOptionPane.showMessageDialog(null, "No (new) quests found!");
 		}
 	}
 	

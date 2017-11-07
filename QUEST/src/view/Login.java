@@ -127,7 +127,7 @@ public class Login extends JFrame {
 							
 							String username = fNum.getText();
 							String password = String.valueOf(fPassword.getPassword());
-							System.out.print(password);
+							System.out.println(password);
 
 							Connection conn = null;
 							Statement stmt = null;
