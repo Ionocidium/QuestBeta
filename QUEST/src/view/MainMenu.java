@@ -107,7 +107,7 @@ public class MainMenu extends JFrame {
 				//do nothing
 			}
 			else {
-				newarea = true;
+				//newarea = true;
 				try {
 					new File("./exercises").mkdir();
 					List<String> lines = Arrays.asList("int main () {", "\t", "}");
@@ -127,7 +127,7 @@ public class MainMenu extends JFrame {
 				//do nothing
 			}
 			else {
-				newarea = true;
+				//newarea = true;
 				try {
 					List<String> lines = Arrays.asList("int main () {", "\tint number = 9", "\tchar character 9;", "\tprintf\"hello world\");" , "}");
 					Path file = Paths.get("./exercises/" + user.getUsername() + "-e2.c");
@@ -146,7 +146,7 @@ public class MainMenu extends JFrame {
 				//do nothing
 			}
 			else {
-				newarea = true;
+				//newarea = true;
 				try {
 					List<String> lines = Arrays.asList("int main () {", "\t", "}");
 					Path file = Paths.get("./exercises/" + user.getUsername() + "-e3.c");
@@ -165,7 +165,7 @@ public class MainMenu extends JFrame {
 				//do nothing
 			}
 			else {
-				newarea = true;
+				//newarea = true;
 				try {
 					List<String> lines = Arrays.asList("int main () {", "\t", "}");
 					Path file = Paths.get("./exercises/" + user.getUsername() + "-e4.c");
@@ -184,7 +184,7 @@ public class MainMenu extends JFrame {
 				//do nothing
 			}
 			else {
-				newarea = true;
+				//newarea = true;
 				try {
 					List<String> lines = Arrays.asList("int main () {", "\t", "}");
 					Path file = Paths.get("./exercises/" + user.getUsername() + "-e5.c");
@@ -203,7 +203,7 @@ public class MainMenu extends JFrame {
 				//do nothing
 			}
 			else {
-				newarea = true;
+				//newarea = true;
 				try {
 					List<String> lines = Arrays.asList("int main () {", "\t", "}");
 					Path file = Paths.get("./exercises/" + user.getUsername() + "-e6.c");
@@ -216,7 +216,7 @@ public class MainMenu extends JFrame {
 			break;
 		case 7:
 			// tower preparations
-			emblem = 24;
+			emblem = 25;
 			break;
 
 		}
@@ -237,14 +237,16 @@ public class MainMenu extends JFrame {
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userareas " +
-						"WHERE U_Num = " + user.getUserNumber() + " AND E_Num = '" + question.getExercise() + "'";
+							   "WHERE U_Num = " + user.getUserNumber() + " AND E_Num = '" + question.getExercise() + "'";
 
 				ResultSet res = stmt.executeQuery(check);
 
-				if (res.next()) {
-
+				int count = 0;
+				while (res.next()) {
+					count++;
 				}
-				else {
+				
+				if (count <= 0) {
 					newarea = true;
 				}
 			} 
@@ -474,7 +476,6 @@ public class MainMenu extends JFrame {
 
 						//JOptionPane.showMessageDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
 
-						Object[] choices = {"Input Password", "Skip on Password"};
 						String input = (String) JOptionPane.showInputDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!\n...you can also input the password if you have it.", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon, null, "");
 
 						if (input != null && input.equals(question.getAreaPassword())) {
@@ -520,6 +521,14 @@ public class MainMenu extends JFrame {
 						else {
 							JOptionPane.showMessageDialog(null, "The Boss Door doesn't budge.", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
 						}
+					}
+					else if (user.getArea() == 7) {
+						//JOptionPane.showMessageDialog(null, "The Boss Tower is under construction.", "Boss Tower", JOptionPane.PLAIN_MESSAGE, icon);
+						
+						//moving windows
+						TestMenu tframe = new TestMenu(user, question);
+						//tframe.initialize(user);
+						dispose();
 					}
 					else if (emblemcheck >= 1) {
 						JOptionPane.showMessageDialog(null, "The Boss Room is empty...", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
@@ -667,8 +676,8 @@ public class MainMenu extends JFrame {
 
 		String userName = user.getUsername();
 		JLabel lblName = new JLabel("Name: " + user.getUsername());
-		lblName.setBounds(15, 16, 218, 32);
-		lblName.setFont(new Font("Tahoma", Font.PLAIN, 26));
+		lblName.setBounds(15, 16, 263, 32);
+		lblName.setFont(new Font("3Dventure", Font.PLAIN, 30));
 
 		String userLvl = Integer.toString(user.getPoints() / 100);
 
@@ -677,18 +686,18 @@ public class MainMenu extends JFrame {
 		String area = "";
 
 		switch (user.getArea()) {
-		case 1: area = "Varisland"; break;
-		case 2: area = "Syntown"; break;
-		case 3: area = "Inoutown"; break;
-		case 4: area = "Elsif Village"; break;
-		case 5: area = "Looping Meadows"; break;
-		case 6: area = "City of No Return"; break;
-		case 7: area = "The Tower of Knowledge"; break;
+		case 1: area = "<html><p style=\"font-size:20px\">Varisland</p></html>"; break;
+		case 2: area = "<html><p style=\"font-size:20px\">Syntown</p></html>"; break;
+		case 3: area = "<html><p style=\"font-size:20px\">Inoutown</p></html>"; break;
+		case 4: area = "<html><p style=\"font-size:20px\">Elsif Village</p></html>"; break;
+		case 5: area = "<html><p style=\"font-size:20px\">Looping Meadows</p></html>"; break;
+		case 6: area = "<html><p style=\"font-size:20px\">City of No Return</p></html>"; break;
+		case 7: area = "<html><p style=\"font-size:20px\">The Tower of Knowledge</p></html>"; break;
 		}
 
-		JLabel lblArea = new JLabel("Area: " + area);
-		lblArea.setBounds(15, 59, 254, 32);
-		lblArea.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		JLabel lblArea = new JLabel(area);
+		lblArea.setBounds(15, 59, 254, 52);
+		lblArea.setFont(new Font("3Dventure", Font.PLAIN, 22));
 
 		JButton bMap = new JButton("");
 		bMap.setBounds(25, 124, 244, 90);
@@ -755,6 +764,35 @@ public class MainMenu extends JFrame {
 				questTextArea.setToolTipText("Contains the current quests from a previous report.");
 				questTextArea.setWrapStyleWord(true);
 				questTextArea.setEditable(false);
+		
+		if (user.getArea() == 7) {
+			bCompile.setVisible(false);
+			scrollQuest.setVisible(false);
+			questTextArea.setVisible(false);
+			bRandomTest.setBounds(23, 227, 246, 90);
+			exerciseTextArea.setBounds(311, 113, 277, 476);
+			exerciseTextArea.setText("Welcome to The Tower of Knowledge!\n\n" +
+									 "In here you shall be pitted against 5 challenging bosses, " +
+									 "testing the knowledge you have gathered until now. You will have " +
+									 "3 lives in the tower, and failing to answer a question will lose " +
+									 "you 1. At the same time, another question will " +
+									 "be prepared for you. And only once you have answered all 5 questions correctly " +
+									 "will you have finished the test.\n\n" +
+									 "It's conquered or be conquered! Let's aim for the top!");
+			exerciseTextArea.setToolTipText("Instructions to the ever tall tower.");
+			lblTip.setText("<html>Tip: <font face=\"Tahoma\" size=\"3\">Take your time. The tower isn't time based.</font></html>");
+			if (emblemcheck >= 1) {
+				exerciseTextArea.setText("Welcome to The Tower of Knowledge!\n\n" +
+						 "In here you shall be pitted against 5 challenging bosses, " +
+						 "testing the knowledge you have gathered until now. You will have " +
+						 "3 lives in the tower, and failing to answer a question will lose " +
+						 "you 1. At the same time, another question will " +
+						 "be prepared for you. And only once you have answered all 5 questions correctly " +
+						 "will you have finished the test.\n\n" +
+						 "It's conquered or be conquered! Let's aim for the top!\n\nYou may have cleared it already, but you may challenge it again!");
+			}
+		}
+				
 		//adding badge to scrollpane
 		Connection bConn = null;
 		Statement bStmt = null;
