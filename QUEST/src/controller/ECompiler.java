@@ -21,6 +21,14 @@ import controller.fileops.FileLoad;
 import controller.fileops.FileSave;
 import model.ErrorLog;
 
+/**
+ * This class is used for editing the file path of PDE-C’s compiler since the default compiler can be changed by other developers. Another use of this class is
+ * for compiling a source code given a file path.
+ * @author Alexander John D. Jose
+ * 
+ * Tailored to work for QUEST
+ */
+
 public class ECompiler {
 
 	private static EventController instance = null;

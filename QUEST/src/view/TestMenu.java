@@ -187,7 +187,7 @@ public class TestMenu {
 							if (user.getArea() == 7) {
 								if (textField.getText().equals(test.getAnswer())) {
 									ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/key.png"));
-									JOptionPane.showMessageDialog(null, "Correct! Going up...", "Successful Attack", JOptionPane.PLAIN_MESSAGE, icon);
+									JOptionPane.showMessageDialog(null, "Correct! Going up!", "Successful Attack", JOptionPane.PLAIN_MESSAGE, icon);
 									floor = floor + 1;
 									if (floor > 5) {
 										Answer man = new Answer("");

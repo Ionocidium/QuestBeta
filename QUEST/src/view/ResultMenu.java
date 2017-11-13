@@ -22,6 +22,7 @@ import model.User;
 
 import javax.swing.JTextArea;
 import javax.swing.JScrollBar;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
@@ -180,8 +181,8 @@ public class ResultMenu {
 
 						stmt.executeUpdate(areaclear);
 					}
-					
-					JOptionPane.showMessageDialog(null, "You have obtained an achievement!", "Congratulations!", JOptionPane.PLAIN_MESSAGE);
+					ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/no-badge.png"));
+					JOptionPane.showMessageDialog(null, "You have obtained an achievement!", "Congratulations!", JOptionPane.PLAIN_MESSAGE, icon);
 				} 
 				catch(Exception a) {
 					System.out.println(a.getMessage());	    	
@@ -297,8 +298,8 @@ public class ResultMenu {
 								"ON DUPLICATE KEY UPDATE UT_Num = UT_Num + 1"; 
 
 						stmt.executeUpdate(query);
-
-						JOptionPane.showMessageDialog(null, "You have obtained an achievement!", "Congratulations!", JOptionPane.PLAIN_MESSAGE);
+						ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/no-badge.png"));
+						JOptionPane.showMessageDialog(null, "You have obtained achievement(s)!", "Congratulations!", JOptionPane.PLAIN_MESSAGE, icon);
 						user.setAchievements(user.getAchievements() + 1);
 						user.setPoints(user.getPoints() + pts);
 					}

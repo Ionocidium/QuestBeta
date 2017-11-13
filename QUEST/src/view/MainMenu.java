@@ -58,6 +58,7 @@ public class MainMenu extends JFrame {
 	private String[] questMessage = {"", "", "", "", ""};
 	private String[] questTitle = {"", "", "", "", ""};
 	private boolean newarea = false;
+	private boolean allclear = false;
 	private String areapass = "";
 	private int emblem = 0;
 	private int emblemcheck = 0;
@@ -262,7 +263,8 @@ public class MainMenu extends JFrame {
 
 		/**
 		 * Check the db if the person has already cleared the boss room, if they have change the text
-		 * that appears on it
+		 * that appears on it. If they have cleared the game already, the boss room is open once more
+		 * to collect all the achievements.
 		 */
 
 		try {
@@ -282,6 +284,15 @@ public class MainMenu extends JFrame {
 
 				if (res.next()) {
 					emblemcheck = res.getInt(1);
+				}
+				
+				check = "SELECT * FROM userachievements " +
+						"WHERE U_Num = " + user.getUserNumber() + " AND A_Num = 26";
+
+				res = stmt.executeQuery(check);
+				
+				if (res.next()) {
+					allclear = true;
 				}
 			} 
 			catch(Exception a) {
@@ -342,7 +353,7 @@ public class MainMenu extends JFrame {
 		if (newarea == true) {
 			//JOptionPane.showMessageDialog(null,  "this is a new area: " + question.getExercise());
 			StringBuilder sb = new StringBuilder(10);
-			for( int i = 0; i < 10; i++ ) {
+			for(int i = 0; i < 10; i++) {
 				sb.append(AB.charAt(rnd.nextInt(AB.length())));
 			}
 			areapass = sb.toString();
@@ -398,6 +409,21 @@ public class MainMenu extends JFrame {
 				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
 				stmt = (Statement) conn.createStatement();
 
+				/**
+				 * Check what stage the student is at, if they have done one or more exercises
+				 */
+				
+				String checkarea = "SELECT * FROM exercises, userareas " +
+						"WHERE exercises.E_Num = userareas.E_Num AND AR_Num = " + user.getArea();
+				
+				ResultSet test = stmt.executeQuery(checkarea);
+				
+				int stage = 0;
+				
+				while (test.next()) {
+					stage++;
+				}
+				
 				String check = "SELECT * FROM exercises " +
 						"WHERE AR_Num = " + user.getArea() + " ";
 
@@ -472,7 +498,13 @@ public class MainMenu extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/key.png"));
-					if (question.getCleared() == 0) {
+					if (allclear == true) {
+						//moving windows
+						TestMenu tframe = new TestMenu(user, question);
+						//tframe.initialize(user);
+						dispose();
+					}
+					else if (question.getCleared() == 0) {
 
 						//JOptionPane.showMessageDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
 
@@ -731,7 +763,10 @@ public class MainMenu extends JFrame {
 
 		//System.out.println(question.getCleared());
 
-		if (question.getCleared() == 0) {
+		if (allclear == true) {
+			exerciseTextArea.setText("It's not over yet! Proceed to challenge the remaining tests to obtain all the badges!");
+		}
+		else if (question.getCleared() == 0) {
 			exerciseTextArea.setText("Main Quest:\n" + question.getMessage());
 		}
 		else if (emblemcheck >= 1) {
