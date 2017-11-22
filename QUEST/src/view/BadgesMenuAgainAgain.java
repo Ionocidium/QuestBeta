@@ -133,7 +133,7 @@ public class BadgesMenuAgainAgain {
 		try {
 			System.out.print("test");
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/quest", "user", "");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT A_num, A_Ttl, A_Msg, A_Bdg FROM achievements WHERE A_Num != 0 AND A_Bdg != 0");
 			while(rs.next()){

@@ -619,16 +619,17 @@ public class MainMenu extends JFrame {
 		bCompile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-
+					
 					//PDialogBox pdb = new PDialogBox("Title", "Message", 1);
 					//pdb.showMessage();
 					//JOptionPane.showMessageDialog(null, "Relative: " + fp + " | Absolute: " + Paths.get(fp).toAbsolutePath());
 					//System.out.println("\nRelative: " + fp + " | Absolute: " + Paths.get(fp).toAbsolutePath());
 
+					quests = "";
 					String absolPath = Paths.get(fp).toAbsolutePath().toString();
 					absolPath = absolPath.replace("\\.", "");
 
-					System.out.println("Absolute New: " + absolPath);
+					//System.out.println("Absolute New: " + absolPath);
 
 					Path filePath = Paths.get(absolPath).toAbsolutePath();
 
@@ -638,7 +639,7 @@ public class MainMenu extends JFrame {
 					Path next = cmp.compile(filePath, el);
 
 					if (el.getErrorLog().trim().equals("")) {
-						System.out.println("It's running!");
+						//System.out.println("It's running!");
 						cmp.runProgram(next);
 						el.setErrorLog("No errors!");
 					}
@@ -647,7 +648,7 @@ public class MainMenu extends JFrame {
 					}
 
 					//String elog = new PCompiler().compileRun(filePath);
-					JOptionPane.showMessageDialog(null, "Log: " + el.getErrorLog());
+					//JOptionPane.showMessageDialog(null, "Log: " + el.getErrorLog());
 					ErrorPolling ep = new ErrorPolling(el.getErrorLog(), user, fp);
 
 					/**
@@ -692,7 +693,7 @@ public class MainMenu extends JFrame {
 						e.printStackTrace();
 					}
 					
-					if (quests.equals("")) {
+					if (quests.equals("") || quests == null) {
 						questTextArea.setText("Sub Quests:\n\nThere are no sub-quests to do!");
 					}
 					else {

@@ -134,15 +134,15 @@ public class ECompiler {
 			String filename = f.getName();
 			String currentOS = System.getProperty("os.name").toLowerCase();
 
-			System.out.println("OS: " + currentOS);
+			//System.out.println("OS: " + currentOS);
 			
 			if (currentOS.indexOf("win") >= 0) {
 				String compiled = dir.concat("\\").concat(filename.substring(0, f.getName().lastIndexOf(".")).concat(".exe"));
 				
-				System.out.println("Compiled File: " + compiled);
+				//System.out.println("Compiled File: " + compiled);
 
 				if (this.programIfExists(compiled)) {
-					System.out.println("Compiled!");
+					System.out.println("Finished Compiling");
 					ProcessBuilder pb = new ProcessBuilder("cmd", "/k", "start", compiled);
 					Process proc = pb.start();
 				}

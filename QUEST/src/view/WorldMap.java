@@ -271,6 +271,9 @@ public class WorldMap {
 		returnButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		returnButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				MainMenu newView = new MainMenu(user, question);
+				newView.setVisible(true);
+				frame.dispose();
 			}
 		});
 		returnButton.setBounds(10, 503, 122, 32);
