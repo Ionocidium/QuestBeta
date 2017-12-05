@@ -51,7 +51,8 @@ import javax.swing.JScrollPane;
 import java.sql.*;
 
 /**
- * Handles the MainMenu of QUEST. All the buttons present lead to other functionalities and views.
+ * Handles the MainMenu of QUEST. Does not have much front-end functionality other than redirecting to other views. This is where
+ * all the badges, quests and exercises are shown.
  * 
  * @author Ramon Arca
  * @author Darren Garcia
