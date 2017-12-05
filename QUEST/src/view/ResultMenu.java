@@ -26,6 +26,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
+/**
+ * Handles the results of the test. The user may also be awarded with an achievement if applicable.
+ * 
+ * @author Darren Garcia
+ */
+
 public class ResultMenu {
 
 	private JFrame frame;

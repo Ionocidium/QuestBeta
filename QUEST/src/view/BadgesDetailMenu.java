@@ -13,6 +13,12 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * Handles the details for Badges.
+ * 
+ * @author Ramon Arca
+ */
+
 public class BadgesDetailMenu {
 
 	private JFrame frame;

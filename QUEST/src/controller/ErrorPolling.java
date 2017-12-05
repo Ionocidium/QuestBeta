@@ -14,6 +14,13 @@ import com.mysql.jdbc.Statement;
 import model.Test;
 import model.User;
 
+/**
+ * Handles the creation and completion of quests. Creates then inputs the quest into the database.
+ * 
+ * @author Ramon Arca
+ * @author Darren Garcia
+ */
+
 public class ErrorPolling {
 
 	private boolean quest = false;

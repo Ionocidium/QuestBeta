@@ -23,6 +23,13 @@ import model.User;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+/**
+ * Handles the leaderboard view. This shows the local leaderboards and is based on the number of achievements the users have.
+ * 
+ * @author Ramon Arca
+ * @author Darren Garcia
+ */
+
 public class LeaderboardMenu {
 
 	private JFrame frame;

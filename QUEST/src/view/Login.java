@@ -41,6 +41,8 @@ import javax.swing.ImageIcon;
 
 /**
  * The Login Screen of the program.
+ * 
+ * @author Ramon Arca
  * @author Darren Garcia
  */
 public class Login extends JFrame {

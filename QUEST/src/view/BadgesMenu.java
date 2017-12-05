@@ -37,8 +37,13 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+/**
+ * Handles the Badges Menu to show all the badges the game has and the badges the user has obtained.
+ * 
+ * @author Ramon Arca
+ */
 
-public class BadgesMenuAgainAgain {
+public class BadgesMenu {
 
 	private JFrame frame;
 	private User user;
@@ -64,7 +69,7 @@ public class BadgesMenuAgainAgain {
 	 * Create the application.
 	 * @wbp.parser.entryPoint
 	 */
-	public BadgesMenuAgainAgain(User user , Exercises question) {
+	public BadgesMenu(User user , Exercises question) {
 		this.user = user;
 		this.question = question;
 		initialize();

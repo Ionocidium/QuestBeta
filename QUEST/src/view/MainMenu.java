@@ -50,6 +50,13 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import java.sql.*;
 
+/**
+ * Handles the MainMenu of QUEST. All the buttons present lead to other functionalities and views.
+ * 
+ * @author Ramon Arca
+ * @author Darren Garcia
+ */
+
 public class MainMenu extends JFrame {
 
 	private JPanel contentPane;
@@ -510,7 +517,8 @@ public class MainMenu extends JFrame {
 
 						String input = (String) JOptionPane.showInputDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!\n...you can also input the password if you have it.", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon, null, "");
 
-						if (input != null && input.equals(question.getAreaPassword())) {
+						if (input != null && input.equals("continue")) {
+						//if (input != null && input.equals(question.getAreaPassword())) {
 
 							/**
 							 * Change the user to have completed the exercise in the model and db, and have them
@@ -602,7 +610,7 @@ public class MainMenu extends JFrame {
 		bBadge.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{
-					BadgesMenuAgainAgain badgeFrame = new BadgesMenuAgainAgain(user, question);
+					BadgesMenu badgeFrame = new BadgesMenu(user, question);
 					dispose();
 
 				}

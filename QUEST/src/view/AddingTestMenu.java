@@ -23,16 +23,21 @@ import model.Test;
 import model.User;
 
 import javax.swing.JButton;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+
+/**
+ * Handles the adding of tests by a teacher.
+ * 
+ * @author Darren Garcia
+ */
 
 public class AddingTestMenu {
 
 	private JFrame frame;
-	private JTextField textField;
-	private JTextField pointField;
 	public String des;
-	private JTextField correctField;
-	private JTextField incorrectField;
-	private JTextField answerField;
+	private JTextField titleField;
+	private JTextField ansField;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -71,7 +76,7 @@ public class AddingTestMenu {
 		Test test = new Test();
 				
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 651);
+		frame.setBounds(100, 100, 700, 651);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		frame.setTitle("Adding a new test...");
@@ -80,90 +85,102 @@ public class AddingTestMenu {
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
 		
-		JLabel lblTitle = new JLabel("Title: ");
-		lblTitle.setBounds(10, 11, 67, 14);
-		panel.add(lblTitle);
+		final Test ptest = test;
+		final int pt = pts;
 		
-		textField = new JTextField();
-		textField.setBounds(87, 46, 337, 20);
-		panel.add(textField);
-		textField.setColumns(10);
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(12, 13, 658, 542);
+		panel.add(tabbedPane);
+		
+		JPanel titlePanel = new JPanel();
+		tabbedPane.addTab("Title and Description", null, titlePanel, null);
+		titlePanel.setLayout(null);
+		
+		JLabel lblTitle = new JLabel("Title of Test: ");
+		lblTitle.setBounds(12, 13, 116, 16);
+		titlePanel.add(lblTitle);
+		
+		titleField = new JTextField();
+		titleField.setBounds(12, 42, 629, 22);
+		titlePanel.add(titleField);
+		titleField.setColumns(10);
 		
 		JLabel lblDescription = new JLabel("Description: ");
-		lblDescription.setBounds(10, 93, 89, 14);
-		panel.add(lblDescription);
+		lblDescription.setBounds(12, 115, 72, 16);
+		titlePanel.add(lblDescription);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 213, 414, 168);
-		panel.add(scrollPane);
+		JScrollPane scrollDescriptionArea = new JScrollPane();
+		scrollDescriptionArea.setBounds(12, 144, 629, 168);
+		titlePanel.add(scrollDescriptionArea);
+		
+		JTextArea txtrDescriptionArea = new JTextArea();
+		scrollDescriptionArea.setViewportView(txtrDescriptionArea);
+		txtrDescriptionArea.setText("Description here...");
+		txtrDescriptionArea.setLineWrap(true);
+		txtrDescriptionArea.setWrapStyleWord(true);
+		
+		JPanel codePanel = new JPanel();
+		tabbedPane.addTab("Code", null, codePanel, null);
+		codePanel.setLayout(null);
 		
 		JLabel lblTest = new JLabel("Test Code: ");
-		lblTest.setBounds(10, 49, 89, 14);
-		panel.add(lblTest);
+		lblTest.setBounds(12, 9, 67, 16);
+		codePanel.add(lblTest);
 		
-		JTextArea txtrCodeArea = new JTextArea();
-		txtrCodeArea.setText("");
-		txtrCodeArea.setEditable(true);
-		scrollPane.setViewportView(txtrCodeArea);
+		JScrollPane testAnsPane = new JScrollPane();
+		testAnsPane.setBounds(12, 38, 629, 200);
+		codePanel.add(testAnsPane);
+		
+		JTextArea testAnsArea = new JTextArea();
+		testAnsPane.setViewportView(testAnsArea);
 		
 		JLabel lblAns = new JLabel("Final Answer Code: ");
-		lblAns.setBounds(10, 188, 110, 14);
-		panel.add(lblAns);
+		lblAns.setBounds(12, 251, 116, 16);
+		codePanel.add(lblAns);
+		
+		JScrollPane ansPane = new JScrollPane();
+		ansPane.setBounds(12, 280, 629, 219);
+		codePanel.add(ansPane);
 		
 		JTextArea txtAnsCode = new JTextArea();
 		txtAnsCode.setText("");
 		txtAnsCode.setEditable(true);
-		scrollPane.setViewportView(txtAnsCode);
+		ansPane.setViewportView(txtAnsCode);
 		
-		JScrollPane scrollPane_11 = new JScrollPane();
-		scrollPane_11.setBounds(10, 118, 414, 59);
-		panel.add(scrollPane_11);
+		JPanel messagePanel = new JPanel();
+		tabbedPane.addTab("Messages and Answer", null, messagePanel, null);
+		messagePanel.setLayout(null);
 		
-		JTextArea txtrDescriptionArea = new JTextArea();
-		scrollPane_11.setViewportView(txtrDescriptionArea);
-		txtrDescriptionArea.setText("Description here...");
-		txtrDescriptionArea.setLineWrap(true);
-		txtrDescriptionArea.setWrapStyleWord(true);
-		txtrDescriptionArea.setEditable(false);
+		JLabel lblIncorrect = new JLabel("Incorrect Message:");
+		lblIncorrect.setBounds(12, 11, 116, 16);
+		messagePanel.add(lblIncorrect);
 		
-		JLabel lblPoints = new JLabel("Points: ");
-		lblPoints.setBounds(10, 509, 67, 14);
-		panel.add(lblPoints);
+		JLabel lblCorrect = new JLabel("Correct:");
+		lblCorrect.setBounds(12, 195, 47, 16);
+		messagePanel.add(lblCorrect);
 		
-		pointField = new JTextField();
-		pointField.setBounds(111, 426, 313, 20);
-		panel.add(pointField);
-		pointField.setColumns(10);
+		JLabel label = new JLabel("Answer: ");
+		label.setBounds(12, 396, 52, 16);
+		messagePanel.add(label);
 		
-		JLabel lblCorrect = new JLabel("Correct Message: ");
-		lblCorrect.setBounds(10, 469, 89, 14);
-		panel.add(lblCorrect);
+		JScrollPane incorrectPane = new JScrollPane();
+		incorrectPane.setBounds(12, 36, 629, 146);
+		messagePanel.add(incorrectPane);
 		
-		correctField = new JTextField();
-		correctField.setBounds(111, 466, 313, 20);
-		panel.add(correctField);
-		correctField.setColumns(10);
+		JTextArea incorrectArea = new JTextArea();
+		incorrectPane.setViewportView(incorrectArea);
 		
-		JLabel lblIncorrect = new JLabel("Incorrect Message: ");
-		lblIncorrect.setBounds(10, 429, 101, 14);
-		panel.add(lblIncorrect);
+		JScrollPane correctPane = new JScrollPane();
+		correctPane.setBounds(12, 224, 629, 146);
+		messagePanel.add(correctPane);
 		
-		incorrectField = new JTextField();
-		incorrectField.setBounds(87, 506, 337, 20);
-		panel.add(incorrectField);
-		incorrectField.setColumns(10);
+		JTextArea correctArea = new JTextArea();
+		correctPane.setViewportView(correctArea);
 		
-		JLabel lblAnsw = new JLabel("Answer: ");
-		lblAnsw.setBounds(10, 540, 67, 14);
-		panel.add(lblAnsw);
-		
-		answerField = new JTextField();
-		answerField.setBounds(87, 537, 337, 20);
-		panel.add(answerField);
-		answerField.setColumns(10);
-		
-		final Test ptest = test;
-		final int pt = pts;
+		ansField = new JTextField();
+		ansField.setBounds(12, 425, 629, 22);
+		messagePanel.add(ansField);
+		ansField.setColumns(10);
 		
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(new ActionListener() {
@@ -183,7 +200,7 @@ public class AddingTestMenu {
 
 								String query = "INSERT INTO tests " +
 											   "(`T_Num`, `T_Ttl`, `T_Msg`, `T_Cod`, `T_Ans`, `T_Fan`, `T_Pts`, `T_Cor`, `T_Inc`, `A_Num`)" +
-											   "VALUES (NULL, " + textField.getText() + ", " + txtrDescriptionArea.getText() + ", " + txtrCodeArea.getText() + ", " + answerField.getText() + ", " + txtAnsCode.getText() + ", " + pointField.getText() + ", " + correctField.getText() + ", " + incorrectField.getText() + "0)";
+											   "VALUES (NULL, " + titleField.getText() + ", " + txtrDescriptionArea.getText() + ", " + testAnsArea.getText() + ", " + ansField.getText() + ", " + txtAnsCode.getText() + ", 20, " + correctArea.getText() + ", " + incorrectArea.getText() + "0)";
 
 								ResultSet rs = stmt.executeQuery(query);
 							} 
@@ -200,7 +217,7 @@ public class AddingTestMenu {
 				});
 			}
 		});
-		btnSubmit.setBounds(335, 568, 89, 23);
+		btnSubmit.setBounds(581, 568, 89, 23);
 		panel.add(btnSubmit);
 	}
 }

@@ -37,7 +37,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPasswordField;
 
 /**
- * The Login Screen of the program.
+ * The Register Screen of the program.
+ * 
+ * @author Ramon Arca
  * @author Darren Garcia
  */
 public class Registration extends JFrame {

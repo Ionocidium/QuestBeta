@@ -26,6 +26,12 @@ import model.User;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
+/**
+ * Handles the tests, where the user can challenge once an exercise is completed.
+ * 
+ * @author Darren Garcia
+ */
+
 public class TestMenu {
 
 	private JFrame frame;

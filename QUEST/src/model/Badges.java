@@ -2,6 +2,12 @@ package model;
 
 import javax.swing.JButton;
 
+/**
+ * Handles the encapsulation and representation of <code>Badges</code> model.
+ * 
+ * @author Darren Garcia
+ */
+
 public class Badges {
 	
 	private int badgeNum;

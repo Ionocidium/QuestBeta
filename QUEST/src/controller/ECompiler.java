@@ -26,7 +26,10 @@ import model.ErrorLog;
  * for compiling a source code given a file path.
  * @author Alexander John D. Jose
  * 
- * Tailored to work for QUEST
+ * Tailored to work with QUEST, without the usage of the editor areas.
+ * 
+ * @author Darren Garcia
+ * 
  */
 
 public class ECompiler {

@@ -26,6 +26,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Handles the changing of subjects/areas within the program. 
+ * 
+ * @author Ramon Arca
+ */
+
 public class WorldMap {
 
 	private JFrame frame;
