@@ -11,6 +11,7 @@ import com.alee.laf.WebLookAndFeel;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import model.Database;
 import model.Exercises;
 import model.User;
 import view.MainMenu;
@@ -20,6 +21,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,11 +33,13 @@ import java.sql.ResultSet;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 
@@ -76,11 +80,11 @@ public class Login extends JFrame {
 	 */
 	public Login() throws FontFormatException, IOException {
 		initialize();
-		
+
 	}
-	
+
 	public void initialize() throws FontFormatException, IOException {
-		
+
 		try {
 			UIManager.setLookAndFeel(WebLookAndFeel.class.getCanonicalName());
 		} catch (ClassNotFoundException e1) {
@@ -96,9 +100,7 @@ public class Login extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		
-		
+
 		setResizable(false);
 		setTitle("Login Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,14 +121,93 @@ public class Login extends JFrame {
 		lLogin.setIcon(new ImageIcon(Login.class.getResource("/img/title-transparent-small.png")));
 		lLogin.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
-		JButton btnConfirm = new JButton("Login");
 
+		/**
+		 * IP, user and password initialization. If the user does not have any IP stored in the database, or if there
+		 * was an error connecting to the database, then this is used.
+		 */
+
+		boolean validIP = false;
+
+		while (validIP == false) {
+			JTextField ipField = new JTextField();
+			JTextField dUserField = new JTextField(15);
+			JTextField dUserPassword = new JTextField(15);
+
+			JPanel myPanel = new JPanel(new GridLayout(0, 1, 2, 2));
+			
+			myPanel.add(new JLabel("Enter DB Information. (Clicking CANCEL will use localhost):"));
+			myPanel.add(Box.createHorizontalStrut(15));
+			myPanel.add(new JLabel("IP Address and Port:"));
+			myPanel.add(ipField);
+			myPanel.add(new JLabel("DB Username:"));
+			myPanel.add(dUserField);
+			myPanel.add(new JLabel("DB Password:"));
+			myPanel.add(dUserPassword);
+			
+			int result = JOptionPane.showConfirmDialog(null, myPanel, 
+					"Database Information", JOptionPane.OK_CANCEL_OPTION);
+
+			Database db = new Database();
+			
+			if ((ipField.getText() == null || ipField.getText().equals("") || dUserField.getText() == null || dUserField.getText().equals("")) && result != JOptionPane.CANCEL_OPTION) {
+				JOptionPane.showMessageDialog(null, "Please input something in the IP Address Field and/or the Database Username Field.");
+			}
+			else if (result == JOptionPane.OK_OPTION) {
+				db.setIP("jdbc:mysql://" + ipField.getText() + "/quest");
+				db.setDbu(dUserField.getText());
+				db.setDbp(dUserPassword.getText());
+				
+				System.out.println("IP Address and Port: " + ipField.getText());
+				System.out.println("DB Username: " + dUserField.getText());
+				System.out.println("DB Password: " + dUserPassword.getText());
+			}
+			else if (result == JOptionPane.CANCEL_OPTION) {
+				db.setIP("jdbc:mysql://localhost:3307/quest");
+				db.setDbu("root");
+				db.setDbp("");
+				
+				System.out.println("IP Address and Port: " + db.getIP());
+				System.out.println("DB Username: " + db.getDbu());
+				System.out.println("DB Password: " + db.getDbp());
+			}
+			
+			// Try to connect to the database to see if it works
+			
+			try {
+				Connection conn = null;
+				Statement stmt = null;
+
+				try {
+					Class.forName("com.mysql.jdbc.Driver");	        
+
+					conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
+					stmt = (Statement) conn.createStatement();
+
+					String query = "SELECT 1";
+
+					stmt.executeQuery(query);
+					
+					break;
+				} 
+				catch(Exception a) {
+					System.out.println(a.getMessage());	    	
+					JOptionPane.showMessageDialog(null, "A connection error has occured. Your IP, SQL username and/or SQL password may be incorrect.");
+				}		
+
+			} 
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		JButton btnConfirm = new JButton("Login");
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							
+
 							String username = fNum.getText();
 							String password = String.valueOf(fPassword.getPassword());
 							System.out.println(password);
@@ -141,10 +222,10 @@ public class Login extends JFrame {
 								stmt = (Statement) conn.createStatement();
 
 								String query = "SELECT * FROM users " +
-											   "WHERE U_Usn ='" + username + "' AND U_Pas ='" + password + "'";
+										"WHERE U_Usn ='" + username + "' AND U_Pas ='" + password + "'";
 
 								ResultSet rs = stmt.executeQuery(query);
-								
+
 								if (rs.next()) {
 									int rows = rs.getInt(1); 
 									int num = rs.getInt("U_Num");
@@ -165,42 +246,42 @@ public class Login extends JFrame {
 									set.setArea(ar);
 
 									//obtaining exercises
-									
+
 									query = "SELECT * FROM userareas " +
-									        "WHERE U_Num = " + num + " ";
-									
+											"WHERE U_Num = " + num + " ";
+
 									ResultSet ex = stmt.executeQuery(query);
-									
+
 									int en = 1;
 									int cleared = 0;
 									String areapass = "AAAAAAAAAA";
-									
+
 									if (ex.next()) {
 										rows = ex.getInt(1);
 										en = ex.getInt("E_Num");
 										cleared = ex.getInt("UA_Clr");
 										areapass = ex.getString("UA_Pas");
 									}
-									
+
 									query = "SELECT * FROM exercises " +
-									        "WHERE E_Num = " + en + " ";
-									
+											"WHERE E_Num = " + en + " ";
+
 									ResultSet res = stmt.executeQuery(query);
-									
+
 									String ins = "";
-									
+
 									if (res.next()) {
 										rows = res.getInt(1);
 										ins = res.getString("E_Ins");
 									}
-									
+
 									Exercises question = new Exercises();
 									question.setExercise(en);
 									question.setMessage(ins);
 									question.setArea(ar);
 									question.setCleared(cleared);
 									question.setAreaPassword(areapass);
-									
+
 									//moving windows
 									if (tp == 0) {
 										MainMenu frame = new MainMenu(set, question);
@@ -230,9 +311,9 @@ public class Login extends JFrame {
 				});
 			}
 		});
-		
+
 		fPassword = new JPasswordField();
-		
+
 		btnNewButton = new JButton("Register");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -252,43 +333,43 @@ public class Login extends JFrame {
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(51, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lLogin)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lNum)
-								.addComponent(lPassword))
-							.addGap(28)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(fPassword, Alignment.LEADING)
-								.addComponent(fNum, Alignment.LEADING, 160, 160, Short.MAX_VALUE)
-								.addGroup(Alignment.LEADING, gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(btnConfirm, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-					.addGap(54))
-		);
+						.addContainerGap(51, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lLogin)
+								.addGroup(gl_contentPane.createSequentialGroup()
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(lNum)
+												.addComponent(lPassword))
+										.addGap(28)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+												.addComponent(fPassword, Alignment.LEADING)
+												.addComponent(fNum, Alignment.LEADING, 160, 160, Short.MAX_VALUE)
+												.addGroup(Alignment.LEADING, gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+														.addComponent(btnConfirm, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+														.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+						.addGap(54))
+				);
 		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(22)
-					.addComponent(lLogin)
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(fNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lNum))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lPassword)
-						.addComponent(fPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addComponent(btnConfirm)
-					.addGap(17)
-					.addComponent(btnNewButton)
-					.addContainerGap(27, Short.MAX_VALUE))
-		);
+						.addGap(22)
+						.addComponent(lLogin)
+						.addGap(18)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(fNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lNum))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lPassword)
+								.addComponent(fPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(18)
+						.addComponent(btnConfirm)
+						.addGap(17)
+						.addComponent(btnNewButton)
+						.addContainerGap(27, Short.MAX_VALUE))
+				);
 		contentPane.setLayout(gl_contentPane);
 	}
 }

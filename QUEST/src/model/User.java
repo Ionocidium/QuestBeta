@@ -37,6 +37,7 @@ public class User {
 	 * @param type User Type
 	 * @param area User Area
 	 */
+	
 	public User(int usernumber, String username, String password, int achievements, int points, int type, int area) {
 		this.usernumber = usernumber;
 		this.username = username;
@@ -94,7 +95,7 @@ public class User {
 	public void setType(int type) {
 		this.type = type;
 	}
-	
+
 	public int getArea() {
 		return area;
 	}

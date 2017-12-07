@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import api.component.PCompiler;
@@ -22,6 +23,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import java.awt.GridLayout;
+
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
@@ -99,7 +102,7 @@ public class MainMenu extends JFrame {
 
 	public void initialize(User user, Exercises question) {
 		setTitle("Main Menu");
-
+		
 		/**
 		 * Area initialization, the user's area is saved within the database and loaded when they are logged in
 		 * to get the area, use user.getArea(); In the following switch, the files are created within the directory
