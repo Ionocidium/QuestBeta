@@ -5,6 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.EventObject;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,6 +23,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import model.Answer;
+import model.Database;
 import model.Test;
 import model.User;
 
@@ -27,6 +32,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextPane;
 
 /**
  * Handles the adding of tests by a teacher.
@@ -38,11 +44,17 @@ public class AddingTestMenu {
 
 	private JFrame frmTeacherModule;
 	public String des;
+	private ArrayList <Integer> testnum;
+	Vector<Integer> comboBoxItems;
 	private JTextField titleField;
 	private JTextField ansField;
 	private JTextField badgeField;
 	private JTextField areaField;
 	private JTextField badgeNameField;
+	private JTextField dTitleField;
+	private JTextField dAnswerField;
+	private JTextField dBadgeField;
+	private JTextField dAreaField;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -66,16 +78,15 @@ public class AddingTestMenu {
 
 	
 	
-	public AddingTestMenu(User user) {
-		initialize(user);
+	public AddingTestMenu(Database db) {
+		initialize(db);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
-	 * 
-	 * 
 	 */
-	public void initialize(User user) {
+
+	public void initialize(Database db) {
 		String cod = "";
 		int pts = 0;
 		Test test = new Test();
@@ -92,13 +103,14 @@ public class AddingTestMenu {
 		
 		final Test ptest = test;
 		final int pt = pts;
+		testnum = new ArrayList<Integer>();
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(12, 13, 807, 546);
 		panel.add(tabbedPane);
 		
 		JPanel testPanel = new JPanel();
-		tabbedPane.addTab("Tests", null, testPanel, null);
+		tabbedPane.addTab("Add Tests", null, testPanel, null);
 		testPanel.setLayout(null);
 		
 		JLabel lblTitle = new JLabel("Title of Test: ");
@@ -122,7 +134,6 @@ public class AddingTestMenu {
 		JTextArea txtrDescriptionArea = new JTextArea();
 		txtrDescriptionArea.setToolTipText("Description and instructions for the test are inputed here");
 		scrollDescriptionArea.setViewportView(txtrDescriptionArea);
-		txtrDescriptionArea.setLineWrap(true);
 		txtrDescriptionArea.setWrapStyleWord(true);
 		
 		JScrollPane testPane = new JScrollPane();
@@ -207,6 +218,10 @@ public class AddingTestMenu {
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.setBounds(697, 42, 89, 23);
 		testPanel.add(btnSubmit);
+		
+		JLabel lblWarning = new JLabel("A test isn't a candidate for deletion until this page is refreshed.");
+		lblWarning.setBounds(427, 13, 359, 16);
+		testPanel.add(lblWarning);
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				EventQueue.invokeLater(new Runnable() {
@@ -247,6 +262,208 @@ public class AddingTestMenu {
 			}
 		});
 		
+		JPanel deletePanel = new JPanel();
+		deletePanel.setLayout(null);
+		tabbedPane.addTab("Delete Tests", null, deletePanel, null);
+		
+		JLabel dTitle = new JLabel("Title of Test: ");
+		dTitle.setBounds(274, 13, 116, 16);
+		deletePanel.add(dTitle);
+		
+		dTitleField = new JTextField();
+		dTitleField.setEditable(false);
+		dTitleField.setToolTipText("Title of the test, to be displayed only");
+		dTitleField.setColumns(10);
+		dTitleField.setBounds(274, 42, 250, 22);
+		deletePanel.add(dTitleField);
+		
+		JLabel dDescription = new JLabel("Description: ");
+		dDescription.setBounds(12, 77, 72, 16);
+		deletePanel.add(dDescription);
+		
+		JScrollPane dDescriptionPane = new JScrollPane();
+		dDescriptionPane.setBounds(12, 106, 250, 168);
+		deletePanel.add(dDescriptionPane);
+		
+		JTextArea dDescriptionArea = new JTextArea();
+		dDescriptionArea.setEditable(false);
+		dDescriptionPane.setViewportView(dDescriptionArea);
+		
+		JLabel dTestCode = new JLabel("Test Code: ");
+		dTestCode.setBounds(12, 287, 67, 16);
+		deletePanel.add(dTestCode);
+		
+		JScrollPane dTestPane = new JScrollPane();
+		dTestPane.setBounds(12, 316, 250, 168);
+		deletePanel.add(dTestPane);
+		
+		JTextArea dTestArea = new JTextArea();
+		dTestArea.setEditable(false);
+		dTestPane.setViewportView(dTestArea);
+		
+		JLabel dAns = new JLabel("Final Answer Code: ");
+		dAns.setBounds(274, 77, 116, 16);
+		deletePanel.add(dAns);
+		
+		JScrollPane dAnsPane = new JScrollPane();
+		dAnsPane.setBounds(274, 106, 250, 168);
+		deletePanel.add(dAnsPane);
+		
+		JTextPane dAnsArea = new JTextPane();
+		dAnsArea.setEditable(false);
+		dAnsPane.setViewportView(dAnsArea);
+		
+		JLabel dIncorrect = new JLabel("Incorrect Display Message: ");
+		dIncorrect.setBounds(274, 287, 158, 16);
+		deletePanel.add(dIncorrect);
+		
+		JScrollPane dIncorrectPane = new JScrollPane();
+		dIncorrectPane.setBounds(274, 316, 250, 168);
+		deletePanel.add(dIncorrectPane);
+		
+		JTextPane dIncorrectArea = new JTextPane();
+		dIncorrectArea.setEditable(false);
+		dIncorrectPane.setViewportView(dIncorrectArea);
+		
+		JLabel dCorrect = new JLabel("Correct Display Message: ");
+		dCorrect.setBounds(536, 77, 158, 16);
+		deletePanel.add(dCorrect);
+		
+		JScrollPane dCorrectPane = new JScrollPane();
+		dCorrectPane.setBounds(536, 106, 250, 168);
+		deletePanel.add(dCorrectPane);
+		
+		JTextPane dCorrectArea = new JTextPane();
+		dCorrectArea.setEditable(false);
+		dCorrectPane.setViewportView(dCorrectArea);
+		
+		JLabel dAnswerofTest = new JLabel("Answer of Test:");
+		dAnswerofTest.setBounds(536, 287, 116, 16);
+		deletePanel.add(dAnswerofTest);
+		
+		dAnswerField = new JTextField();
+		dAnswerField.setEditable(false);
+		dAnswerField.setToolTipText("Answer that a user has to input to get the question correctly");
+		dAnswerField.setColumns(10);
+		dAnswerField.setBounds(536, 316, 250, 22);
+		deletePanel.add(dAnswerField);
+		
+		JLabel dBadge = new JLabel("Badge Association:");
+		dBadge.setBounds(536, 351, 116, 16);
+		deletePanel.add(dBadge);
+		
+		dBadgeField = new JTextField();
+		dBadgeField.setEditable(false);
+		dBadgeField.setToolTipText("Leave blank if the test is not associated with any badge");
+		dBadgeField.setColumns(10);
+		dBadgeField.setBounds(536, 380, 250, 22);
+		deletePanel.add(dBadgeField);
+		
+		JLabel dArea = new JLabel("Area Number:");
+		dArea.setToolTipText("Input the area number for the test to appear upon. If left blank, it will be associated with the first.");
+		dArea.setBounds(536, 415, 116, 16);
+		deletePanel.add(dArea);
+		
+		dAreaField = new JTextField();
+		dAreaField.setEditable(false);
+		dAreaField.setToolTipText("Leave blank if the test is not associated with any badge");
+		dAreaField.setColumns(10);
+		dAreaField.setBounds(536, 444, 250, 22);
+		deletePanel.add(dAreaField);
+		
+		JLabel dTestNumber = new JLabel("Test Number:");
+		dTestNumber.setBounds(12, 13, 103, 16);
+		deletePanel.add(dTestNumber);
+		
+		/**
+		 * Obtaining all the test numbers from the database and the combo box
+		 */
+		
+		
+		try {
+			Connection conn = null;
+			Statement stmt = null;
+
+			try {
+				Class.forName("com.mysql.jdbc.Driver");	        
+
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
+				stmt = (Statement) conn.createStatement();
+
+				String query = "SELECT T_Num FROM tests " +
+							   "WHERE T_Del = 0";
+
+				ResultSet rs = stmt.executeQuery(query);
+				
+				comboBoxItems = new Vector<Integer>();
+				
+				while (rs.next()) {
+					testnum.add(rs.getInt("T_Num"));
+					comboBoxItems.add(rs.getInt("T_Num"));
+				}
+			} 
+			catch(Exception a) {
+				System.out.println(a.getMessage());	    	
+				JOptionPane.showMessageDialog(null, "A connection error has occured. Your IP, SQL username and/or SQL password may be incorrect.");
+			}		
+
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		final DefaultComboBoxModel<Integer> model = new DefaultComboBoxModel<Integer>(comboBoxItems);
+		
+		JComboBox<Integer> testCombo = new JComboBox<Integer>(model);
+		testCombo.setBounds(12, 42, 250, 22);
+		deletePanel.add(testCombo);
+		testCombo.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent eventSource) {
+				   //JComboBox combo = testCombo.getSource();
+				   int selected = (int) testCombo.getSelectedItem();
+
+				   try {
+						Connection conn = null;
+						Statement stmt = null;
+
+						try {
+							Class.forName("com.mysql.jdbc.Driver");	        
+
+							conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
+							stmt = (Statement) conn.createStatement();
+
+							String query = "SELECT * FROM tests " +
+										   "WHERE T_Num = " + selected;
+
+							ResultSet rs = stmt.executeQuery(query);
+							
+							comboBoxItems = new Vector<Integer>();
+							
+							if (rs.next()) {
+								dTitleField.setText(rs.getString("T_Ttl"));
+								dDescriptionArea.setText(rs.getString("T_Msg"));
+								dTestArea.setText(rs.getString("T_Cod"));
+								dAnsArea.setText(rs.getString("T_Fan"));
+								dIncorrectArea.setText(rs.getString("T_Inc"));
+								dCorrectArea.setText(rs.getString("T_Cor"));
+								dAnswerField.setText(rs.getString("T_Ans"));
+								dBadgeField.setText(Integer.toString(rs.getInt("A_Num")));
+								dAreaField.setText(Integer.toString(rs.getInt("AR_Num")));
+							}
+						} 
+						catch(Exception a) {
+							System.out.println(a.getMessage());	    	
+							JOptionPane.showMessageDialog(null, "A connection error has occured. Your IP, SQL username and/or SQL password may be incorrect.");
+						}		
+
+					} 
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+			   }
+			}
+		);
+		 
 		JPanel badgePanel = new JPanel();
 		tabbedPane.addTab("Badges", null, badgePanel, null);
 		badgePanel.setLayout(null);
@@ -283,6 +500,46 @@ public class AddingTestMenu {
 		JLabel lblBadgeType = new JLabel("Badge Type:");
 		lblBadgeType.setBounds(272, 361, 72, 16);
 		badgePanel.add(lblBadgeType);
+		
+		JButton deleteButton = new JButton("Delete");
+		deleteButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				EventQueue.invokeLater(new Runnable() {
+					public void run() { 
+						//Add into database
+						try {
+							Connection conn = null;
+							Statement stmt = null;
+
+							try {
+								Class.forName("com.mysql.jdbc.Driver");	        
+
+								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+								stmt = (Statement) conn.createStatement();
+								
+								int selected = (int) testCombo.getSelectedItem();
+								
+								String query = "UPDATE tests " +
+											   "SET T_Del = 1 " +
+											   "WHERE T_Num = " + selected;
+
+								stmt.executeUpdate(query);
+							} 
+							catch(Exception a) {
+								System.out.println(a.getMessage());	    	
+								JOptionPane.showMessageDialog(null, "A database error occured.");
+							}		
+
+						} 
+						catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		});
+		deleteButton.setBounds(697, 42, 89, 23);
+		deletePanel.add(deleteButton);
 		
 		JButton badgeSubmit = new JButton("Submit");
 		badgeSubmit.setBounds(425, 389, 97, 25);

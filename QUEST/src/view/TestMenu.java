@@ -109,7 +109,7 @@ public class TestMenu {
 				
 				if (user.getArea() == 7) {
 					query = "SELECT * FROM tests " +
-							"WHERE A_Num != '0' " +
+							"WHERE A_Num != '0' AND T_Del != 1" +
 						    "ORDER BY RAND() " +
 						    "LIMIT 1";
 				}

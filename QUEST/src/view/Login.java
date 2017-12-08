@@ -56,6 +56,8 @@ public class Login extends JFrame {
 	private JLabel lLogin;
 	private JPasswordField fPassword;
 	private JButton btnNewButton;
+	private Database db = new Database();
+	private boolean nocheck = false;
 
 	/**
 	 * Launch the application.
@@ -146,9 +148,6 @@ public class Login extends JFrame {
 			
 			int result = JOptionPane.showConfirmDialog(null, myPanel, 
 					"Database Information", JOptionPane.OK_CANCEL_OPTION);
-
-			Database db = new Database();
-			boolean nocheck = false;
 			
 			if ((ipField.getText() == null || ipField.getText().equals("") || dUserField.getText() == null || dUserField.getText().equals("")) && result != JOptionPane.CANCEL_OPTION) {
 				JOptionPane.showMessageDialog(null, "Please input something in the IP Address Field and/or the Database Username Field.");
@@ -221,7 +220,7 @@ public class Login extends JFrame {
 							try {
 								Class.forName("com.mysql.jdbc.Driver");	        
 
-								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+								conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 								stmt = (Statement) conn.createStatement();
 
 								String query = "SELECT * FROM users " +
@@ -295,7 +294,7 @@ public class Login extends JFrame {
 										dispose();
 									}
 									else {
-										AddingTestMenu frame = new AddingTestMenu(set);
+										AddingTestMenu frame = new AddingTestMenu(db);
 										dispose();
 									}
 								} 
