@@ -230,6 +230,8 @@ public class AddingTestMenu {
 											   "VALUES ('" + titleField.getText() + "', '" + txtrDescriptionArea.getText() + "', '" + testAnsArea.getText() + "', '" + ansField.getText() + "', '" + txtAnsCode.getText() + "', 20, '" + correctArea.getText() + "', '" + incorrectArea.getText() + "', '" + badgeField.getText() + "', '" + areaField.getText() + "')";
 
 								stmt.executeUpdate(query);
+								
+								JOptionPane.showMessageDialog(null, "You have successfully inserted the test into the database.");
 							} 
 							catch(Exception a) {
 								System.out.println(a.getMessage());	    	
@@ -304,6 +306,8 @@ public class AddingTestMenu {
 											   "VALUES ('" + badgeNameField.getText() + "', '" + badgeDescriptionArea.getText() + "', '" + (String)badgeTypeCombo.getSelectedItem() + "')";
 
 								stmt.executeUpdate(query);
+								
+								JOptionPane.showMessageDialog(null, "You have successfully inserted the badge into the database.");
 							} 
 							catch(Exception a) {
 								System.out.println(a.getMessage());	    	

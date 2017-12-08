@@ -137,7 +137,6 @@ public class Login extends JFrame {
 			JPanel myPanel = new JPanel(new GridLayout(0, 1, 2, 2));
 			
 			myPanel.add(new JLabel("Enter DB Information. (Clicking CANCEL will use localhost):"));
-			myPanel.add(Box.createHorizontalStrut(15));
 			myPanel.add(new JLabel("IP Address and Port:"));
 			myPanel.add(ipField);
 			myPanel.add(new JLabel("DB Username:"));
@@ -149,9 +148,11 @@ public class Login extends JFrame {
 					"Database Information", JOptionPane.OK_CANCEL_OPTION);
 
 			Database db = new Database();
+			boolean nocheck = false;
 			
 			if ((ipField.getText() == null || ipField.getText().equals("") || dUserField.getText() == null || dUserField.getText().equals("")) && result != JOptionPane.CANCEL_OPTION) {
 				JOptionPane.showMessageDialog(null, "Please input something in the IP Address Field and/or the Database Username Field.");
+				nocheck = true;
 			}
 			else if (result == JOptionPane.OK_OPTION) {
 				db.setIP("jdbc:mysql://" + ipField.getText() + "/quest");
@@ -172,33 +173,35 @@ public class Login extends JFrame {
 				System.out.println("DB Password: " + db.getDbp());
 			}
 			
-			// Try to connect to the database to see if it works
-			
-			try {
-				Connection conn = null;
-				Statement stmt = null;
-
+			if (nocheck == false) {
+				// Try to connect to the database to see if it works
 				try {
-					Class.forName("com.mysql.jdbc.Driver");	        
+					Connection conn = null;
+					Statement stmt = null;
 
-					conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
-					stmt = (Statement) conn.createStatement();
+					try {
+						Class.forName("com.mysql.jdbc.Driver");	        
 
-					String query = "SELECT 1";
+						conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
+						stmt = (Statement) conn.createStatement();
 
-					stmt.executeQuery(query);
-					
-					break;
+						String query = "SELECT 1";
+
+						stmt.executeQuery(query);
+
+						break;
+					} 
+					catch(Exception a) {
+						System.out.println(a.getMessage());	    	
+						JOptionPane.showMessageDialog(null, "A connection error has occured. Your IP, SQL username and/or SQL password may be incorrect.");
+					}		
+
 				} 
-				catch(Exception a) {
-					System.out.println(a.getMessage());	    	
-					JOptionPane.showMessageDialog(null, "A connection error has occured. Your IP, SQL username and/or SQL password may be incorrect.");
-				}		
-
-			} 
-			catch (Exception e) {
-				e.printStackTrace();
+				catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+			nocheck = false;
 		}
 		
 		JButton btnConfirm = new JButton("Login");
@@ -245,7 +248,7 @@ public class Login extends JFrame {
 									set.setType(tp);
 									set.setArea(ar);
 
-									//obtaining exercises
+									//obtaining exercises, randomized if it's the first time
 
 									query = "SELECT * FROM userareas " +
 											"WHERE U_Num = " + num + " ";
@@ -264,7 +267,9 @@ public class Login extends JFrame {
 									}
 
 									query = "SELECT * FROM exercises " +
-											"WHERE E_Num = " + en + " ";
+											"WHERE AR_Num = " + en + " " +
+											"ORDER BY RAND() " +
+											"LIMIT 1";
 
 									ResultSet res = stmt.executeQuery(query);
 
