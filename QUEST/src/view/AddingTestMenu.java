@@ -3,8 +3,11 @@ package view;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
@@ -18,9 +21,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
 
 import model.Answer;
 import model.Database;
@@ -234,17 +234,31 @@ public class AddingTestMenu {
 							try {
 								Class.forName("com.mysql.jdbc.Driver");	        
 
-								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
-								stmt = (Statement) conn.createStatement();
+								conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
+								//stmt = (Statement) conn.createStatement();
 
 								if (areaField.getText() == null || areaField.getText().equals("")) {
 									areaField.setText("1");	
 								}
 								
-								String query = "INSERT INTO tests (T_Ttl, T_Msg, T_Cod, T_Ans, T_Fan, T_Pts, T_Cor, T_Inc, A_Num, AR_Num) " +
-											   "VALUES ('" + titleField.getText() + "', '" + txtrDescriptionArea.getText() + "', '" + testAnsArea.getText() + "', '" + ansField.getText() + "', '" + txtAnsCode.getText() + "', 20, '" + correctArea.getText() + "', '" + incorrectArea.getText() + "', '" + badgeField.getText() + "', '" + areaField.getText() + "')";
+								//String query = "INSERT INTO tests (T_Ttl, T_Msg, T_Cod, T_Ans, T_Fan, T_Pts, T_Cor, T_Inc, A_Num, AR_Num) " +
+								//			   "VALUES ('" + titleField.getText() + "', '" + txtrDescriptionArea.getText() + "', '" + testAnsArea.getText() + "', '" + ansField.getText() + "', '" + txtAnsCode.getText() + "', 20, '" + correctArea.getText() + "', '" + incorrectArea.getText() + "', '" + badgeField.getText() + "', '" + areaField.getText() + "')";
 
-								stmt.executeUpdate(query);
+								//stmt.executeUpdate(query);
+								
+								PreparedStatement st = conn.prepareStatement("INSERT INTO tests (T_Ttl, T_Msg, T_Cod, T_Ans, T_Fan, T_Pts, T_Cor, T_Inc, A_Num, AR_Num) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+								st.setObject(1, titleField.getText());
+								st.setObject(2, txtrDescriptionArea.getText());
+								st.setObject(3, testAnsArea.getText());
+								st.setObject(4, ansField.getText());
+								st.setObject(5, txtAnsCode.getText());
+								st.setObject(6, "20");
+								st.setObject(7, correctArea.getText());
+								st.setObject(8, incorrectArea.getText());
+								st.setObject(9, badgeField.getText());
+								st.setObject(10, areaField.getText());
+								
+								st.executeUpdate();
 								
 								JOptionPane.showMessageDialog(null, "You have successfully inserted the test into the database.");
 							} 
@@ -388,12 +402,16 @@ public class AddingTestMenu {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
 				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
-				stmt = (Statement) conn.createStatement();
+				//stmt = (Statement) conn.createStatement();
 
-				String query = "SELECT T_Num FROM tests " +
-							   "WHERE T_Del = 0";
+				//String query = "SELECT T_Num FROM tests " +
+				//			   "WHERE T_Del = 0";
 
-				ResultSet rs = stmt.executeQuery(query);
+				//ResultSet rs = stmt.executeQuery(query);
+				
+				PreparedStatement st = conn.prepareStatement("SELECT T_Num FROM tests WHERE T_Del = 0");
+
+				ResultSet rs = st.executeQuery();
 				
 				comboBoxItems = new Vector<Integer>();
 				
@@ -430,14 +448,15 @@ public class AddingTestMenu {
 							Class.forName("com.mysql.jdbc.Driver");	        
 
 							conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
-							stmt = (Statement) conn.createStatement();
+							//stmt = (Statement) conn.createStatement();
 
-							String query = "SELECT * FROM tests " +
-										   "WHERE T_Num = " + selected;
-
-							ResultSet rs = stmt.executeQuery(query);
+							//String query = "SELECT * FROM tests " +
+							//				 "WHERE T_Num = " + selected;
 							
-							comboBoxItems = new Vector<Integer>();
+							PreparedStatement st = conn.prepareStatement("SELECT * FROM tests WHERE T_Num = ?");
+							st.setObject(1, selected);
+
+							ResultSet rs = st.executeQuery();
 							
 							if (rs.next()) {
 								dTitleField.setText(rs.getString("T_Ttl"));
@@ -505,34 +524,42 @@ public class AddingTestMenu {
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				EventQueue.invokeLater(new Runnable() {
-					public void run() { 
-						//Add into database
-						try {
-							Connection conn = null;
-							Statement stmt = null;
-
+					public void run() {
+						int selected = (int) testCombo.getSelectedItem();
+						int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete test #" + selected + " from the database?");
+						
+						if (confirm == JOptionPane.YES_OPTION) {
+							//Add into database
 							try {
-								Class.forName("com.mysql.jdbc.Driver");	        
+								Connection conn = null;
+								Statement stmt = null;
 
-								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
-								stmt = (Statement) conn.createStatement();
-								
-								int selected = (int) testCombo.getSelectedItem();
-								
-								String query = "UPDATE tests " +
-											   "SET T_Del = 1 " +
-											   "WHERE T_Num = " + selected;
+								try {
+									Class.forName("com.mysql.jdbc.Driver");	        
 
-								stmt.executeUpdate(query);
+									conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
+									//stmt = (Statement) conn.createStatement();
+
+									//String query = "UPDATE tests " +
+									//			   "SET T_Del = 1 " +
+									//		       "WHERE T_Num = " + selected;
+									
+									PreparedStatement st = conn.prepareStatement("UPDATE tests SET T_Del = 1 WHERE T_Num  = ?");
+									st.setObject(1, selected);
+								
+									st.executeUpdate();
+
+									//stmt.executeUpdate(query);
+								} 
+								catch(Exception a) {
+									System.out.println(a.getMessage());	    	
+									JOptionPane.showMessageDialog(null, "A database error occured.");
+								}		
+
 							} 
-							catch(Exception a) {
-								System.out.println(a.getMessage());	    	
-								JOptionPane.showMessageDialog(null, "A database error occured.");
-							}		
-
-						} 
-						catch (Exception e) {
-							e.printStackTrace();
+							catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
 					}
 				});
@@ -556,13 +583,18 @@ public class AddingTestMenu {
 							try {
 								Class.forName("com.mysql.jdbc.Driver");	        
 
-								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
-								stmt = (Statement) conn.createStatement();
+								conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
+								//stmt = (Statement) conn.createStatement();
 								
-								String query = "INSERT INTO achievements (A_Ttl, A_Msg, A_Bdg) " +
-											   "VALUES ('" + badgeNameField.getText() + "', '" + badgeDescriptionArea.getText() + "', '" + (String)badgeTypeCombo.getSelectedItem() + "')";
-
-								stmt.executeUpdate(query);
+								//String query = "INSERT INTO achievements (A_Ttl, A_Msg, A_Bdg) " +
+								//			   "VALUES ('" + badgeNameField.getText() + "', '" + badgeDescriptionArea.getText() + "', '" + (String)badgeTypeCombo.getSelectedItem() + "')";
+								
+								PreparedStatement st = conn.prepareStatement("INSERT INTO achievements (A_Ttl, A_Msg, A_Bdg) VALUES (?, ?, ?)");
+								st.setObject(1, badgeNameField.getText());
+								st.setObject(2, badgeDescriptionArea.getText());
+								st.setObject(3, (String)badgeTypeCombo.getSelectedItem());
+								
+								st.executeUpdate();
 								
 								JOptionPane.showMessageDialog(null, "You have successfully inserted the badge into the database.");
 							} 
