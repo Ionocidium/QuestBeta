@@ -40,6 +40,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 /**
  * Handles the Badges Menu to show all the badges the game has and the badges the user has obtained.
+ * A black badge denotes a badge that has not been obtained, while the others (bronze, silver, gold
+ * and platinum) denote the difficulty of the badge.
  * 
  * @author Ramon Arca
  */

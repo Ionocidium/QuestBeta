@@ -30,6 +30,19 @@ public class Test {
 		
 	}
 
+	/**
+	 * Creates a representation that contains the information for <code>Test</code> model.
+	 * @param number Number
+	 * @param title Title
+	 * @param description Description
+	 * @param code Test Code
+	 * @param answer Answer Snippet
+	 * @param fanswer Full Answer Code
+	 * @param points Points
+	 * @param correct Correct Message
+	 * @param incorrect Incorrect Message
+	 * @param achievement Achievement
+	 */
 	public Test(int number, String title, String description, String code, String answer, String fanswer, int points, String correct, String incorrect, int achievement) {
 		this.number = number;
 		this.title = title;

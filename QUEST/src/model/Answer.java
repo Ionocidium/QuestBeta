@@ -21,6 +21,10 @@ public class Answer {
 		
 	}
 	
+	/**
+	 * Creates a representation that contains the information for <code>Answer</code> model.
+	 * @param answer Answer
+	 */
 	public Answer(String answer) {
 		this.answer = answer;
 	}

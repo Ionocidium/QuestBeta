@@ -16,7 +16,9 @@ import model.Test;
 import model.User;
 
 /**
- * Handles the creation and completion of quests. Creates then inputs the quest into the database.
+ * Handles the creation and completion of quests. Obtains a string of errors from the compilation of the code,
+ * and analyzes these errors to create quests. Most common errors have a corresponding quest. When the code is
+ * compiled and there are no errors in compilation, the quests are marked as complete.
  * 
  * @author Ramon Arca
  * @author Darren Garcia

@@ -28,7 +28,9 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
 /**
- * Handles the tests, where the user can challenge once an exercise is completed.
+ * Handles the tests, where the user can challenge once an exercise is completed. The user answers
+ * the test by putting the snippet of code or line number or the answer the question is asking to
+ * proceed to the next page, which is the results page.
  * 
  * @author Darren Garcia
  */

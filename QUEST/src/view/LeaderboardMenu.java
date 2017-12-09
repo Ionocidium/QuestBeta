@@ -25,7 +25,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
- * Handles the leaderboard view. This shows the local leaderboards and is based on the number of achievements the users have.
+ * Handles the leaderboard view. This shows the local leaderboards and is based on the number of 
+ * achievements the users have and compares with users who are near the logged in user's number 
+ * of achievements.
  * 
  * @author Ramon Arca
  * @author Darren Garcia

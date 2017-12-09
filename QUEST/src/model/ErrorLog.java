@@ -17,6 +17,10 @@ public class ErrorLog {
 		
 	}
 	
+	/**
+	 * Creates a representation that contains the information for <code>ErrorLog</code> model.
+	 * @param elog Error Log
+	 */
 	public ErrorLog(String elog) {
 		this.elog = elog;
 	}

@@ -26,7 +26,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Handles the changing of subjects/areas within the program. 
+ * Handles the changing of areas within the program. The world map is a static picture
+ * that has nodes that refer to an area. Each area corresponds to a topic in COMPRO1,
+ * except for the culmination area, obtained by completing all the areas.
  * 
  * @author Ramon Arca
  */

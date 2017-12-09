@@ -38,7 +38,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPasswordField;
 
 /**
- * The Register Screen of the program.
+ * The Register Screen of the program. The user inputs their ID, which serves as their username 
+ * for the program, and the accompanying password. These two make up their credentials to be 
+ * able to log in and use the program. Clicking on register will save the user and lead them 
+ * back to the login page, where they may use the new account.
  * 
  * @author Ramon Arca
  * @author Darren Garcia

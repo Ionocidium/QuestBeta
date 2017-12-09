@@ -23,6 +23,12 @@ public class Database {
 		
 	}
 	
+	/**
+	 * Creates a representation that contains the information for <code>Database</code> model.
+	 * @param ip IP Address
+	 * @param dbu Database Username
+	 * @param dbp Database Password
+	 */
 	public Database(String ip, String dbu, String dbp) {
 		this.ip = ip;
 		this.dbu = dbu;

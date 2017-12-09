@@ -26,7 +26,7 @@ import model.ErrorLog;
  * for compiling a source code given a file path.
  * @author Alexander John D. Jose
  * 
- * Tailored to work with QUEST, without the usage of the editor areas.
+ * Tailored to work with QUEST, without the usage of the editor areas (which presumably was the reason for the crashes).
  * 
  * @author Darren Garcia
  * 

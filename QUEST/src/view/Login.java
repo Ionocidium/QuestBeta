@@ -44,11 +44,15 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 
 /**
- * The Login Screen of the program.
+ * The first screen of the program. The program asks the user their database credentials, to be able
+ * to connect to the database, whether it is a local one or a main database. After this, they are
+ * redirected to the login page itself. The user may click on register to register an account to log 
+ * in with, or log in with an existing account in the database.
  * 
  * @author Ramon Arca
  * @author Darren Garcia
  */
+
 public class Login extends JFrame {
 
 	private JPanel contentPane;
@@ -82,7 +86,6 @@ public class Login extends JFrame {
 	 */
 	public Login() throws FontFormatException, IOException {
 		initialize();
-
 	}
 
 	public void initialize() throws FontFormatException, IOException {
@@ -266,7 +269,7 @@ public class Login extends JFrame {
 									}
 
 									query = "SELECT * FROM exercises " +
-											"WHERE AR_Num = " + en + " " +
+											"WHERE AR_Num = " + en + " AND E_Del != 1 " +
 											"ORDER BY RAND() " +
 											"LIMIT 1";
 
@@ -294,7 +297,7 @@ public class Login extends JFrame {
 										dispose();
 									}
 									else {
-										AddingTestMenu frame = new AddingTestMenu(db);
+										TeacherModule frame = new TeacherModule(db);
 										dispose();
 									}
 								} 

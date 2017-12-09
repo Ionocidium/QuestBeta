@@ -28,7 +28,10 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
 /**
- * Handles the results of the test. The user may also be awarded with an achievement if applicable.
+ * Handles the results of the test. Coming from the test page, the user's answer is transferred
+ * to this page. It is then compared and the user is shown the verdict. If they are correct,
+ * they will be congratulated and awarded an achievement if applicable. Otherwise, they will
+ * have to try the test again.
  * 
  * @author Darren Garcia
  */
