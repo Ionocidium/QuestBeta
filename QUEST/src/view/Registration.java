@@ -11,6 +11,7 @@ import com.alee.laf.WebLookAndFeel;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import model.Database;
 import model.User;
 import view.MainMenu;
 
@@ -47,8 +48,9 @@ public class Registration extends JFrame {
 	private JPanel contentPane;
 	private JTextField fNum;
 	private JLabel lRegistration;
-	private JTextField fPassword;
 	private JButton btnNewButton;
+	private Database db;
+	private JPasswordField fPassword;
 
 	/**
 	 * Launch the application.
@@ -57,8 +59,8 @@ public class Registration extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Registration frame = new Registration();
-					frame.setVisible(true);
+					//Registration frame = new Registration();
+					//frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -71,12 +73,13 @@ public class Registration extends JFrame {
 	 * @throws IOException 
 	 * @throws FontFormatException 
 	 */
-	public Registration() throws FontFormatException, IOException {
-		initialize();
+	public Registration(Database db) throws FontFormatException, IOException {
+		initialize(db);
 		
 	}
 	
-	public void initialize() throws FontFormatException, IOException {
+	public void initialize(Database db) throws FontFormatException, IOException {
+		
 		
 		try {
 			UIManager.setLookAndFeel(WebLookAndFeel.class.getCanonicalName());
@@ -94,6 +97,7 @@ public class Registration extends JFrame {
 			e1.printStackTrace();
 		}
 		
+		this.db = db;
 		setResizable(false);
 		setTitle("Registration Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -131,7 +135,7 @@ public class Registration extends JFrame {
 							try {
 								Class.forName("com.mysql.jdbc.Driver");	        
 
-								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+								conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 								stmt = (Statement) conn.createStatement();
 
 								String query = "INSERT INTO users (U_Usn, U_Pas)" +
@@ -158,8 +162,6 @@ public class Registration extends JFrame {
 			}
 		});
 		
-		fPassword = new JTextField();
-		
 		btnNewButton = new JButton("Return");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -176,43 +178,45 @@ public class Registration extends JFrame {
 				}
 			}
 		});
+		
+		fPassword = new JPasswordField();
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(61)
 					.addComponent(btnNewButton)
-					.addPreferredGap(ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
 					.addComponent(btnConfirm)
 					.addGap(60))
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-					.addContainerGap(59, Short.MAX_VALUE)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(78, Short.MAX_VALUE)
 					.addComponent(lRegistration)
 					.addGap(57))
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(42)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lPassword)
 						.addComponent(lNum))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(fNum, GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-						.addComponent(fPassword, GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
+						.addComponent(fPassword, GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+						.addComponent(fNum, GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
 					.addGap(38))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addComponent(lRegistration, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lNum)
 						.addComponent(fNum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(fPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lPassword))
+						.addComponent(lPassword)
+						.addComponent(fPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnNewButton)

@@ -6,8 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-
-
+import model.Database;
 import model.Exercises;
 import model.User;
 
@@ -38,6 +37,7 @@ public class WorldMap {
 	private User user;
 	private Exercises question;
 	private boolean finalarea = false;
+	private Database db;
 
 	/**
 	 * Launch the application.
@@ -59,9 +59,10 @@ public class WorldMap {
 	 * Create the application.
 	 * @wbp.parser.entryPoint
 	 */
-	public WorldMap(User user, Exercises question) {
+	public WorldMap(User user, Exercises question, Database db) {
 		this.user = user;
 		this.question = question;
+		this.db = db;
 		initialize();
 	}
 
@@ -75,7 +76,7 @@ public class WorldMap {
 		PreparedStatement stmt = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");
+			conn = DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());
 			stmt = conn.prepareStatement("UPDATE users SET AR_Num = ? WHERE U_Num = ?");
 			stmt.setObject(1, areaNum);
 			stmt.setObject(2, user.getUserNumber());
@@ -102,7 +103,7 @@ public class WorldMap {
 			}
 		}
 
-		MainMenu newView = new MainMenu(user, question);
+		MainMenu newView = new MainMenu(user, question, db);
 		newView.setVisible(true);
 		frame.dispose();
 	}
@@ -131,7 +132,7 @@ public class WorldMap {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 
 				String areatest = "SELECT * " +
@@ -277,7 +278,7 @@ public class WorldMap {
 		returnButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		returnButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				MainMenu newView = new MainMenu(user, question);
+				MainMenu newView = new MainMenu(user, question, db);
 				newView.setVisible(true);
 				frame.dispose();
 			}

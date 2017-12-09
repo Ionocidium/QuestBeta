@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import model.Database;
 import model.Test;
 import model.User;
 
@@ -23,6 +24,7 @@ import model.User;
 
 public class ErrorPolling {
 
+	private Database db;
 	private boolean quest = false;
 	private boolean questexists = false; 
 	private boolean questcomplete = false;
@@ -91,7 +93,7 @@ public class ErrorPolling {
 	private static final Pattern PATTERN_PATH = Pattern.compile("((?!.c:)[0-9]+(?=:\\d))"); //pattern for path
 	private static final Pattern PATTERN_ERROR = Pattern.compile("((error:)|(warning:)|(note:)) (.*)"); //pattern for error/note/warning
 
-	public void run(String perror, User user, String filePath) {
+	public void run(String perror, User user, String filePath, Database db) {
 		/**
 		 * Call API from PDE-C to compile the Program
 		 * located in PCompiler.java, under CompileRun
@@ -131,7 +133,7 @@ public class ErrorPolling {
 				
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT UQ_Num, Q_Num FROM userquests " +
@@ -180,7 +182,7 @@ public class ErrorPolling {
 							try {
 								Class.forName("com.mysql.jdbc.Driver");	        
 
-								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+								conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 								stmt = (Statement) conn.createStatement();
 
 								String solve = "UPDATE userquests " +
@@ -226,7 +228,7 @@ public class ErrorPolling {
 					try {
 						Class.forName("com.mysql.jdbc.Driver");	        
 
-						conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+						conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 						stmt = (Statement) conn.createStatement();
 
 						/**
@@ -335,7 +337,7 @@ public class ErrorPolling {
 	}
 	
 	
-	public ErrorPolling(String perror, User user, String filePath) {
-		run(perror, user, filePath);
+	public ErrorPolling(String perror, User user, String filePath, Database db) {
+		run(perror, user, filePath, db);
 	}
 }

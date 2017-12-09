@@ -288,7 +288,7 @@ public class Login extends JFrame {
 
 									//moving windows
 									if (tp == 0) {
-										MainMenu frame = new MainMenu(set, question);
+										MainMenu frame = new MainMenu(set, question, db);
 										//MainMenu frame = new MainMenu(set);
 										frame.setVisible(true);
 										dispose();
@@ -322,7 +322,7 @@ public class Login extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					Registration register = new Registration();
+					Registration register = new Registration(db);
 					register.setVisible(true);
 					dispose();
 				} catch (FontFormatException e) {
