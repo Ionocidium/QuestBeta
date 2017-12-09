@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import model.Database;
 import model.Exercises;
 import model.User;
 
@@ -34,6 +35,7 @@ public class LeaderboardMenu {
 
 	private JFrame frame;
 	private JTable table;
+	private Database db;
 
 	/**
 	 * Launch the application.
@@ -55,15 +57,16 @@ public class LeaderboardMenu {
 	 * Create the application.
 	 * @wbp.parser.entryPoint
 	 */
-	public LeaderboardMenu(User user, Exercises question) {
-		initialize(user, question);
+	public LeaderboardMenu(User user, Exercises question, Database db) {
+		initialize(user, question, db);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(User user, Exercises question) {
+	private void initialize(User user, Exercises question, Database db) {
 		int bottom = 0;
+		this.db = db;
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -108,7 +111,7 @@ public class LeaderboardMenu {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 
 				String query = "SELECT * FROM users " +
@@ -146,7 +149,7 @@ public class LeaderboardMenu {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 				
 				String query;
@@ -231,7 +234,7 @@ public class LeaderboardMenu {
 					public void run() {
 						try {
 							//moving windows
-							MainMenu mm = new MainMenu(user, question);
+							MainMenu mm = new MainMenu(user, question, db);
 							mm.setVisible(true);
 							frame.dispose();
 						} 

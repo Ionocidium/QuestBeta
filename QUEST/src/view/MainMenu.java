@@ -13,6 +13,7 @@ import api.component.PDialogBox;
 import controller.ECompiler;
 import controller.ErrorPolling;
 import model.Badges;
+import model.Database;
 import model.ErrorLog;
 import model.Exercises;
 import model.User;
@@ -73,6 +74,7 @@ public class MainMenu extends JFrame {
 	private int emblem = 0;
 	private int emblemcheck = 0;
 	private JTextArea questTextArea = new JTextArea();
+	private Database db;
 
 	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	static SecureRandom rnd = new SecureRandom();
@@ -96,12 +98,13 @@ public class MainMenu extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainMenu(User user, Exercises question) {
-		initialize(user, question);
+	public MainMenu(User user, Exercises question, Database db) {
+		initialize(user, question, db);
 	}
 
-	public void initialize(User user, Exercises question) {
+	public void initialize(User user, Exercises question, Database db) {
 		setTitle("Main Menu");
+		this.db = db;
 		
 		/**
 		 * Area initialization, the user's area is saved within the database and loaded when they are logged in
@@ -244,7 +247,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userareas " +
@@ -284,7 +287,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userachievements " +
@@ -325,7 +328,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 
 				String check = "SELECT * FROM userquests " +
@@ -376,7 +379,7 @@ public class MainMenu extends JFrame {
 				try {
 					Class.forName("com.mysql.jdbc.Driver");	        
 
-					conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+					conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 					stmt = (Statement) conn.createStatement();
 
 					//JOptionPane.showMessageDialog(null, user.getArea());
@@ -416,7 +419,7 @@ public class MainMenu extends JFrame {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 
 				/**
@@ -510,7 +513,7 @@ public class MainMenu extends JFrame {
 					ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/key.png"));
 					if (allclear == true) {
 						//moving windows
-						TestMenu tframe = new TestMenu(user, question);
+						TestMenu tframe = new TestMenu(user, question, db);
 						//tframe.initialize(user);
 						dispose();
 					}
@@ -535,7 +538,7 @@ public class MainMenu extends JFrame {
 								try {
 									Class.forName("com.mysql.jdbc.Driver");	        
 
-									conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+									conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 									stmt = (Statement) conn.createStatement();
 
 									String check = "UPDATE userareas " +
@@ -557,7 +560,7 @@ public class MainMenu extends JFrame {
 
 							question.setCleared(1);
 							//moving windows
-							TestMenu tframe = new TestMenu(user, question);
+							TestMenu tframe = new TestMenu(user, question, db);
 							//tframe.initialize(user);
 							dispose();
 						}
@@ -569,7 +572,7 @@ public class MainMenu extends JFrame {
 						//JOptionPane.showMessageDialog(null, "The Boss Tower is under construction.", "Boss Tower", JOptionPane.PLAIN_MESSAGE, icon);
 						
 						//moving windows
-						TestMenu tframe = new TestMenu(user, question);
+						TestMenu tframe = new TestMenu(user, question, db);
 						//tframe.initialize(user);
 						dispose();
 					}
@@ -578,7 +581,7 @@ public class MainMenu extends JFrame {
 					}
 					else {
 						//moving windows
-						TestMenu tframe = new TestMenu(user, question);
+						TestMenu tframe = new TestMenu(user, question, db);
 						//tframe.initialize(user);
 						dispose();
 					}
@@ -597,7 +600,7 @@ public class MainMenu extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					//moving windows
-					LeaderboardMenu Lframe = new LeaderboardMenu(user, question);
+					LeaderboardMenu Lframe = new LeaderboardMenu(user, question, db);
 					//tframe.initialize(user);
 					dispose();
 				} 
@@ -613,7 +616,7 @@ public class MainMenu extends JFrame {
 		bBadge.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{
-					BadgesMenu badgeFrame = new BadgesMenu(user, question);
+					BadgesMenu badgeFrame = new BadgesMenu(user, question, db);
 					dispose();
 
 				}
@@ -660,7 +663,7 @@ public class MainMenu extends JFrame {
 
 					//String elog = new PCompiler().compileRun(filePath);
 					//JOptionPane.showMessageDialog(null, "Log: " + el.getErrorLog());
-					ErrorPolling ep = new ErrorPolling(el.getErrorLog(), user, fp);
+					ErrorPolling ep = new ErrorPolling(el.getErrorLog(), user, fp, db);
 
 					/**
 					 * Fetch a list of quests if there exists any within the db
@@ -673,7 +676,7 @@ public class MainMenu extends JFrame {
 						try {
 							Class.forName("com.mysql.jdbc.Driver");	        
 
-							conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+							conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 							stmt = (Statement) conn.createStatement();
 
 							String check = "SELECT * FROM userquests " +
@@ -749,7 +752,7 @@ public class MainMenu extends JFrame {
 		bMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				WorldMap newView = new WorldMap(user, question);
+				WorldMap newView = new WorldMap(user, question, db);
 				dispose();
 
 			}
@@ -847,7 +850,7 @@ public class MainMenu extends JFrame {
 		ArrayList<JButton> btnArr = new ArrayList<>();
 
 		try {
-			bConn = DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");
+			bConn = DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());
 			bStmt = bConn.createStatement();
 			ResultSet bRs = bStmt.executeQuery("SELECT A_num, A_Ttl, A_Msg, A_Bdg FROM achievements WHERE A_Num != 0 AND A_Bdg != 0");
 			while(bRs.next()){

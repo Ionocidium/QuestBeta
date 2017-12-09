@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 
 import model.Badges;
+import model.Database;
 import model.Exercises;
 import model.User;
 
@@ -48,6 +49,7 @@ public class BadgesMenu {
 	private JFrame frame;
 	private User user;
 	private Exercises question;
+	private Database db;
 
 	/**
 	 * Launch the application.
@@ -69,9 +71,10 @@ public class BadgesMenu {
 	 * Create the application.
 	 * @wbp.parser.entryPoint
 	 */
-	public BadgesMenu(User user , Exercises question) {
+	public BadgesMenu(User user , Exercises question, Database db) {
 		this.user = user;
 		this.question = question;
+		this.db = db;
 		initialize();
 		
 	}
@@ -93,7 +96,7 @@ public class BadgesMenu {
 		JButton btnReturn = new JButton("Return");
 		btnReturn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				MainMenu mainFrame = new MainMenu(user, question);
+				MainMenu mainFrame = new MainMenu(user, question, db);
 				mainFrame.setVisible(true);
 				frame.dispose();
 			}
@@ -138,7 +141,7 @@ public class BadgesMenu {
 		try {
 			System.out.print("test");
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");
+			conn = DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT A_num, A_Ttl, A_Msg, A_Bdg FROM achievements WHERE A_Num != 0 AND A_Bdg != 0");
 			while(rs.next()){

@@ -11,6 +11,7 @@ import com.alee.laf.WebLookAndFeel;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import model.Database;
 import model.User;
 import view.MainMenu;
 
@@ -49,6 +50,7 @@ public class Registration extends JFrame {
 	private JLabel lRegistration;
 	private JTextField fPassword;
 	private JButton btnNewButton;
+	private Database db;
 
 	/**
 	 * Launch the application.
@@ -57,8 +59,8 @@ public class Registration extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Registration frame = new Registration();
-					frame.setVisible(true);
+					//Registration frame = new Registration();
+					//frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -71,12 +73,13 @@ public class Registration extends JFrame {
 	 * @throws IOException 
 	 * @throws FontFormatException 
 	 */
-	public Registration() throws FontFormatException, IOException {
-		initialize();
+	public Registration(Database db) throws FontFormatException, IOException {
+		initialize(db);
 		
 	}
 	
-	public void initialize() throws FontFormatException, IOException {
+	public void initialize(Database db) throws FontFormatException, IOException {
+		
 		
 		try {
 			UIManager.setLookAndFeel(WebLookAndFeel.class.getCanonicalName());
@@ -94,6 +97,7 @@ public class Registration extends JFrame {
 			e1.printStackTrace();
 		}
 		
+		this.db = db;
 		setResizable(false);
 		setTitle("Registration Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -131,7 +135,7 @@ public class Registration extends JFrame {
 							try {
 								Class.forName("com.mysql.jdbc.Driver");	        
 
-								conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+								conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 								stmt = (Statement) conn.createStatement();
 
 								String query = "INSERT INTO users (U_Usn, U_Pas)" +

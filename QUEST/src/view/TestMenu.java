@@ -19,6 +19,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import model.Answer;
+import model.Database;
 import model.Exercises;
 import model.Test;
 import model.User;
@@ -49,6 +50,7 @@ public class TestMenu {
 	private int pts = 0;
 	private int nach = 0;
 	private Test test = new Test();
+	private Database db;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -72,8 +74,8 @@ public class TestMenu {
 
 	
 	
-	public TestMenu(User user, Exercises question) {
-		initialize(user, question);
+	public TestMenu(User user, Exercises question, Database db) {
+		initialize(user, question, db);
 	}
 
 	/**
@@ -81,9 +83,10 @@ public class TestMenu {
 	 * 
 	 * 
 	 */
-	public void initialize(User user, Exercises question) {
+	public void initialize(User user, Exercises question, Database db) {
 		//String ttl = "";
-				
+		
+		this.db = db;
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 570);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,7 +98,7 @@ public class TestMenu {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");	        
 
-				conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 
 				String query = "SELECT * FROM tests " +
@@ -133,7 +136,7 @@ public class TestMenu {
 				} 
 				else {
 					JOptionPane.showMessageDialog(null, "Nothing found!");
-					MainMenu mm = new MainMenu(user, question);
+					MainMenu mm = new MainMenu(user, question, db);
 					mm.setVisible(true);
 					frame.dispose();
 				}
@@ -198,7 +201,7 @@ public class TestMenu {
 									if (floor > 5) {
 										Answer man = new Answer("");
 										//moving windows
-										ResultMenu rm = new ResultMenu(user, ptest, man, des, pt, ach, question);
+										ResultMenu rm = new ResultMenu(user, ptest, man, des, pt, ach, question, db);
 										//rm.initialize(user, ptest, man);
 										frame.dispose();
 									}
@@ -209,7 +212,7 @@ public class TestMenu {
 									lives = lives - 1;
 									if (lives == 0) {
 										JOptionPane.showMessageDialog(null, "You've run out of lives! Returning to town...", "Retire", JOptionPane.PLAIN_MESSAGE, icon);
-										MainMenu mm = new MainMenu(user, question);
+										MainMenu mm = new MainMenu(user, question, db);
 										mm.setVisible(true);
 										frame.dispose();
 									}
@@ -227,7 +230,7 @@ public class TestMenu {
 									try {
 										Class.forName("com.mysql.jdbc.Driver");	        
 
-										conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/quest", "root", "");	
+										conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 										stmt = (Statement) conn.createStatement();
 
 										String query = "SELECT * FROM tests " +
@@ -274,7 +277,7 @@ public class TestMenu {
 							else {
 								Answer man = new Answer(textField.getText());
 								//moving windows
-								ResultMenu rm = new ResultMenu(user, ptest, man, des, pt, ach, question);
+								ResultMenu rm = new ResultMenu(user, ptest, man, des, pt, ach, question, db);
 								//rm.initialize(user, ptest, man);
 								frame.dispose();
 							}
