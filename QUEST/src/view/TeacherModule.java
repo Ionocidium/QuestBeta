@@ -35,6 +35,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextArea;
 import javax.swing.ComboBoxModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * Handles the actions to be done by a teacher. Includes the addition of tests, addition of badges 
@@ -58,6 +61,9 @@ public class TeacherModule {
 	private JTextField dBadgeField;
 	private JTextField dAreaField;
 	private JTextField qdelAreaField;
+	private JTextField vbName;
+	private JTextField vbType;
+	private JTable areaTable;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -353,7 +359,7 @@ public class TeacherModule {
 		
 		JPanel deletePanel = new JPanel();
 		deletePanel.setLayout(null);
-		tabbedPane.addTab("Delete Tests", null, deletePanel, null);
+		tabbedPane.addTab("View/Delete Tests", null, deletePanel, null);
 		
 		JLabel dTitle = new JLabel("Title of Test: ");
 		dTitle.setBounds(274, 13, 116, 16);
@@ -677,9 +683,149 @@ public class TeacherModule {
 		deleteButton.setBounds(697, 42, 89, 23);
 		deletePanel.add(deleteButton);
 		
+		JLabel viewTestLabel = new JLabel("Can be used to view the tests as well.");
+		viewTestLabel.setBounds(569, 13, 217, 16);
+		deletePanel.add(viewTestLabel);
+		
 		JButton badgeSubmit = new JButton("Add");
 		badgeSubmit.setBounds(425, 389, 97, 25);
 		badgePanel.add(badgeSubmit);
+		
+		JPanel vbadgePanel = new JPanel();
+		vbadgePanel.setLayout(null);
+		tabbedPane.addTab("View Badges", null, vbadgePanel, null);
+		
+		JLabel label = new JLabel("Name of Badge:");
+		label.setBounds(272, 123, 116, 16);
+		vbadgePanel.add(label);
+		
+		vbName = new JTextField();
+		vbName.setEditable(false);
+		vbName.setToolTipText("Name of the badge.");
+		vbName.setColumns(10);
+		vbName.setBounds(272, 152, 250, 22);
+		vbadgePanel.add(vbName);
+		
+		JLabel label_1 = new JLabel("Description: ");
+		label_1.setBounds(272, 187, 72, 16);
+		vbadgePanel.add(label_1);
+		
+		JScrollPane vbPane = new JScrollPane();
+		vbPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		vbPane.setBounds(272, 216, 250, 168);
+		vbadgePanel.add(vbPane);
+		
+		JTextArea vbDescription = new JTextArea();
+		vbDescription.setEditable(false);
+		vbDescription.setLineWrap(true);
+		vbPane.setViewportView(vbDescription);
+		vbDescription.setWrapStyleWord(true);
+		
+		JLabel label_2 = new JLabel("Badge Type:");
+		label_2.setBounds(272, 397, 72, 16);
+		vbadgePanel.add(label_2);
+		
+		/**
+		 * Obtaining the badges from the database for the area combo box in view badges
+		 */
+		
+		try {
+			Connection conn = null;
+			
+			try {
+				Class.forName("com.mysql.jdbc.Driver");	        
+
+				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());
+				PreparedStatement st = conn.prepareStatement("SELECT A_Num FROM achievements");
+
+				ResultSet rs = st.executeQuery();
+				
+				comboBoxItems = new Vector<Integer>();
+				
+				while (rs.next()) {
+					comboBoxItems.add(rs.getInt("A_Num"));
+				}
+			} 
+			catch(Exception a) {
+				System.out.println(a.getMessage());	    	
+				JOptionPane.showMessageDialog(null, "A connection error has occured. Your IP, SQL username and/or SQL password may be incorrect.");
+			}		
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		final DefaultComboBoxModel<Integer> vbmodel = new DefaultComboBoxModel<Integer>(comboBoxItems);
+		
+		JComboBox<Integer> vbNumberBox = new JComboBox<Integer>(vbmodel);
+		vbNumberBox.setToolTipText("Badge number, according to the database.");
+		vbNumberBox.setBounds(272, 88, 251, 22);
+		vbadgePanel.add(vbNumberBox);
+		
+		vbNumberBox.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent eventSource) {
+				   int selected = (int) vbNumberBox.getSelectedItem();
+
+				   try {
+						Connection conn = null;
+
+						try {
+							Class.forName("com.mysql.jdbc.Driver");	        
+
+							conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());
+							
+							PreparedStatement st = conn.prepareStatement("SELECT * FROM achievements WHERE A_Num = ? AND A_Num != 0");
+							st.setObject(1, selected);
+
+							ResultSet rs = st.executeQuery();
+							
+							String area = "";
+							
+							if (rs.next()) {
+								vbName.setText(rs.getString("A_Ttl"));
+								vbDescription.setText(rs.getString("A_Msg"));
+								
+								//area translation
+								switch (rs.getInt("A_Bdg")) {
+									case 1:
+										area = "Bronze (1)";
+										break;
+									case 2:
+										area = "Silver (2)";
+										break;
+									case 3:
+										area = "Gold (3)";
+										break;
+									case 4:
+										area = "Platinum (4)";
+										break;
+								}
+								
+								vbType.setText(area);
+							}
+						} 
+						catch(Exception a) {
+							System.out.println(a.getMessage());	    	
+							JOptionPane.showMessageDialog(null, "A connection error has occured. Your IP, SQL username and/or SQL password may be incorrect.");
+						}		
+
+					} 
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+			   }
+			}
+		);
+		
+		JLabel vbNumber = new JLabel("Badge Number:");
+		vbNumber.setBounds(273, 60, 116, 16);
+		vbadgePanel.add(vbNumber);
+		
+		vbType = new JTextField();
+		vbType.setEditable(false);
+		vbType.setBounds(272, 426, 250, 22);
+		vbadgePanel.add(vbType);
+		vbType.setColumns(10);
 		
 		JPanel mquestPanel = new JPanel();
 		mquestPanel.setLayout(null);
@@ -700,7 +846,7 @@ public class TeacherModule {
 		qIns.setWrapStyleWord(true);
 		
 		/**
-		 * Obtaining the areas from the database for the area combo box in add main quest
+		 * Obtaining the areas from the database for the area combo box in add delete main quest
 		 */
 		
 		try {
@@ -783,7 +929,7 @@ public class TeacherModule {
 		
 		JPanel mdelPanel = new JPanel();
 		mdelPanel.setLayout(null);
-		tabbedPane.addTab("Delete Exercise", null, mdelPanel, null);
+		tabbedPane.addTab("View/Delete Exercise", null, mdelPanel, null);
 		
 		JLabel qdelDesc = new JLabel("Main Quest Description/Instructions:");
 		qdelDesc.setBounds(272, 151, 207, 16);
@@ -851,6 +997,57 @@ public class TeacherModule {
 		qdelNumBox.setToolTipText("The main quest's corresponding number in the database.");
 		qdelNumBox.setBounds(272, 116, 250, 22);
 		mdelPanel.add(qdelNumBox);
+		
+		JLabel mdelViewQuest = new JLabel("Can be used to view Main Quests as well.");
+		mdelViewQuest.setBounds(282, 425, 250, 16);
+		mdelPanel.add(mdelViewQuest);
+		
+		JPanel areaPanel = new JPanel();
+		tabbedPane.addTab("View Areas", null, areaPanel, null);
+		areaPanel.setLayout(null);
+		
+		JScrollPane atablePane = new JScrollPane();
+		atablePane.setBounds(183, 104, 432, 310);
+		areaPanel.add(atablePane);
+		
+		/**
+		 * Get values from the database about the areas
+		 */
+		
+		areaTable = new JTable();
+		
+		areaTable.setModel(new DefaultTableModel(
+			new Object[][] {
+				{1, "Varisland"},
+				{2, "Syntown"},
+				{3, "Inoutown"},
+				{4, "Elsif Village"},
+				{5, "Looping Meadows"},
+				{6, "City of No Return"},
+				{7, "The Tower of Knowledge"},
+			},
+			new String[] {
+				"Area Number", "Area Name"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				Integer.class, String.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
+		areaTable.getColumnModel().getColumn(0).setResizable(false);
+		areaTable.getColumnModel().getColumn(0).setPreferredWidth(90);
+		areaTable.getColumnModel().getColumn(1).setResizable(false);
+		areaTable.getColumnModel().getColumn(1).setPreferredWidth(200);
+		areaTable.setToolTipText("The areas present in the game.");
+		atablePane.setViewportView(areaTable);
+		
+		/**
+		 * Handles the action listener for the combo box in the quest delete panel.
+		 */
+		
 		qdelNumBox.addActionListener(new ActionListener() {
 			   public void actionPerformed(ActionEvent eventSource) {
 				   int selected = (int) qdelNumBox.getSelectedItem();
