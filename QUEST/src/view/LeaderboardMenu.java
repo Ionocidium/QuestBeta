@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -18,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import model.BadgeCount;
 import model.Database;
 import model.Exercises;
 import model.User;
@@ -35,11 +39,16 @@ import javax.swing.JButton;
  */
 
 public class LeaderboardMenu {
-
+	
 	private JFrame frame;
 	private JTable table;
 	private Database db;
-
+	private int usercount = 0;
+	private int userindex = 0;
+	private int above = 0;
+	private int below = 0;
+	private ArrayList<BadgeCount> list = new ArrayList<BadgeCount>();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -84,13 +93,9 @@ public class LeaderboardMenu {
 		panel.add(lblLeaderboards);
 		
 		table = new JTable();
+		table.setRowSelectionAllowed(false);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, '1'},
-				{null, '2'},
-				{null, '3'},
-				{null, '4'},
-				{null, '5'},
 			},
 			new String[] {
 				"Name", "Ranking"
@@ -120,120 +125,92 @@ public class LeaderboardMenu {
 				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 
-				//getting the count of the achievements per user
+				//getting the user list and putting it in the array
 				
-				PreparedStatement st = conn.prepareStatement("SELECT * FROM exercises WHERE E_Num = ?");
-				st.setObject(1, "");
+				PreparedStatement userlist = conn.prepareStatement("SELECT * FROM users");
 
-				ResultSet result = st.executeQuery();
+				ResultSet uresult = userlist.executeQuery();
 				
-				String query = "SELECT * FROM users " +
-						"WHERE U_Pts <= (SELECT U_Pts FROM users WHERE U_Usn ='" + user.getUsername() + "') AND U_Usn != '" + user.getUsername() + "' " +
-						"ORDER BY U_Pts ASC " +
-						"LIMIT 2";
-
-				ResultSet rs = stmt.executeQuery(query);
-				
-				if (rs.next()) {
-					int rows = rs.getInt(1); 
-					String u1 = rs.getString("U_Usn");
-					table.getModel().setValueAt(u1, 3, 0);
-					bottom++;
-					if (rs.next()) {
-						String u2 = rs.getString("U_Usn");
-						table.getModel().setValueAt(u2, 4, 0);
-						bottom++;
+				while (uresult.next()) {
+					list.add(new BadgeCount(uresult.getInt("U_Num"), uresult.getString("U_Usn"), 0));
+					usercount++;
+					if (uresult.getString("U_Usn") == user.getUsername() && uresult.getInt("U_Num") == user.getUserNumber()) {
+						userindex = usercount;
 					}
-				} 
+				}
+				
+				//getting the count of the achievements per user and putting it in the array
+				
+				PreparedStatement countachievement = conn.prepareStatement("SELECT U_Num, COUNT(A_Num) AS A_Cou FROM userachievements GROUP BY U_Num");
+
+				ResultSet aresult = countachievement.executeQuery();
+				
+				while (aresult.next()) {
+					for(BadgeCount b : list) {
+						if (b.getUserNumber() == aresult.getInt("U_Num")) {
+							b.setAchievementCount(aresult.getInt("A_Cou"));
+						}
+					}
+				}
+				
+				//arranging the arraylist by achievement count
+				list.sort(Comparator.comparing(BadgeCount::getAchievementCount).reversed());
+				
+				//find out how many users are above and below the user
+				below = usercount - userindex;
+				above = userindex;
+				
+				System.out.println("User-index = " + userindex);
+				System.out.println("Above = " + above + " | Below = " + below);
+				
+				//preparation for adding rows
+				DefaultTableModel dt = (DefaultTableModel) table.getModel();
+				
+				if (below >= 2 && above >= 2) {
+					//user is in the middle +2, -2					
+					dt.addRow(new Object[] {list.get(userindex-2).getUsername(), 1});
+					dt.addRow(new Object[] {list.get(userindex-1).getUsername(), 2});
+					dt.addRow(new Object[] {list.get(userindex).getUsername(), 3});
+					dt.addRow(new Object[] {list.get(userindex+1).getUsername(), 4});
+					dt.addRow(new Object[] {list.get(userindex+2).getUsername(), 5});
+				}
+				else if (below >= 3 && above == 1) {
+					//user is second to the top +3, -1
+					dt.addRow(new Object[] {list.get(userindex-1).getUsername(), 1});
+					dt.addRow(new Object[] {list.get(userindex).getUsername(), 2});
+					dt.addRow(new Object[] {list.get(userindex+1).getUsername(), 3});
+					dt.addRow(new Object[] {list.get(userindex+2).getUsername(), 4});
+					dt.addRow(new Object[] {list.get(userindex+3).getUsername(), 5});
+				}
+				else if (below >= 4 && above == 0) {
+					//user is top +4, -0
+					dt.addRow(new Object[] {list.get(userindex).getUsername(), 1});
+					dt.addRow(new Object[] {list.get(userindex+1).getUsername(), 2});
+					dt.addRow(new Object[] {list.get(userindex+2).getUsername(), 3});
+					dt.addRow(new Object[] {list.get(userindex+3).getUsername(), 4});
+					dt.addRow(new Object[] {list.get(userindex+4).getUsername(), 5});
+				}
+				else if (below == 1 && above >= 3) {
+					//user is second to the bottom +1, -3
+					dt.addRow(new Object[] {list.get(userindex-3).getUsername(), 1});
+					dt.addRow(new Object[] {list.get(userindex-2).getUsername(), 2});
+					dt.addRow(new Object[] {list.get(userindex-1).getUsername(), 3});
+					dt.addRow(new Object[] {list.get(userindex).getUsername(), 4});
+					dt.addRow(new Object[] {list.get(userindex+1).getUsername(), 5});
+				}
+				else if (below == 0 && above >= 4) {
+					//user is bottom +0, -4
+					dt.addRow(new Object[] {list.get(userindex-4).getUsername(), 1});
+					dt.addRow(new Object[] {list.get(userindex-3).getUsername(), 2});
+					dt.addRow(new Object[] {list.get(userindex-2).getUsername(), 3});
+					dt.addRow(new Object[] {list.get(userindex-1).getUsername(), 4});
+					dt.addRow(new Object[] {list.get(userindex).getUsername(), 5});
+				}
 			} 
 			catch(Exception a) {
 				System.out.println(a.getMessage());	    	
 				JOptionPane.showMessageDialog(null, "A database error has occured.");
 			}
-			if (bottom == 2) {
-				table.getModel().setValueAt(user.getUsername(), 2, 0);
-			}
-			else if (bottom == 1) {
-				table.getModel().setValueAt(user.getUsername(), 3, 0);
-			}
-			else {
-				table.getModel().setValueAt(user.getUsername(), 4, 0);
-			}
-			try {
-				Class.forName("com.mysql.jdbc.Driver");	        
-
-				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
-				stmt = (Statement) conn.createStatement();
-				
-				String query;
-				
-				if (bottom == 2) {
-					query = "SELECT * FROM users " +
-							"WHERE U_Pts >= (SELECT U_Pts FROM users WHERE U_Usn ='" + user.getUsername() + "') AND U_Usn != '" + user.getUsername() + "' " +
-							"ORDER BY U_Pts ASC " +
-							"LIMIT 2";
-				}
-				else if (bottom == 1) {
-					query = "SELECT * FROM users " +
-							"WHERE U_Pts >= (SELECT U_Pts FROM users WHERE U_Usn ='" + user.getUsername() + "') AND U_Usn != '" + user.getUsername() + "' " +
-							"ORDER BY U_Pts ASC " +
-							"LIMIT 3";
-				}
-				else {
-					query = "SELECT * FROM users " +
-							"WHERE U_Pts >= (SELECT U_Pts FROM users WHERE U_Usn ='" + user.getUsername() + "') AND U_Usn != '" + user.getUsername() + "' " +
-							"ORDER BY U_Pts ASC " +
-							"LIMIT 4";
-				}
-				ResultSet rs = stmt.executeQuery(query);
-				
-				if (rs.next()) {
-					if (bottom == 2) {
-						int rows = rs.getInt(1); 
-						String u3 = rs.getString("U_Usn");
-						table.getModel().setValueAt(u3, 1, 0);
-						if (rs.next()) {
-							String u4 = rs.getString("U_Usn");
-							table.getModel().setValueAt(u4, 0, 0);
-						}
-					}
-					else if (bottom == 1) {
-						int rows = rs.getInt(1); 
-						String u3 = rs.getString("U_Usn");
-						table.getModel().setValueAt(u3, 2, 0);
-						if (rs.next()) {
-							String u4 = rs.getString("U_Usn");
-							table.getModel().setValueAt(u4, 1, 0);
-							if (rs.next()) {
-								String u5 = rs.getString("U_Usn");
-								table.getModel().setValueAt(u5, 0, 0);
-							}
-						}
-					}
-					else {
-						int rows = rs.getInt(1); 
-						String u3 = rs.getString("U_Usn");
-						table.getModel().setValueAt(u3, 3, 0);
-						if (rs.next()) {
-							String u4 = rs.getString("U_Usn");
-							table.getModel().setValueAt(u4, 2, 0);
-							if (rs.next()) {
-								String u5 = rs.getString("U_Usn");
-								table.getModel().setValueAt(u5, 1, 0);
-								if (rs.next()) {
-									String u6 = rs.getString("U_Usn");
-									table.getModel().setValueAt(u6, 0, 0);
-								}
-							}
-						}
-					}
-				} 
-			} 
-			catch(Exception a) {
-				System.out.println(a.getMessage());	    	
-				JOptionPane.showMessageDialog(null, "A database error has occured.");
-			}	
-			
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
