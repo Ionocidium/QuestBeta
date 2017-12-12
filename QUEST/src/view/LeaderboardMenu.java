@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.swing.JFrame;
@@ -106,6 +107,9 @@ public class LeaderboardMenu {
 		table.getColumnModel().getColumn(1).setResizable(false);
 		table.setBounds(10, 61, 414, 100);
 		table.setRowHeight(20);
+		
+		//obtaining from the database
+		
 		try {
 			Connection conn = null;
 			Statement stmt = null;
@@ -116,6 +120,13 @@ public class LeaderboardMenu {
 				conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 				stmt = (Statement) conn.createStatement();
 
+				//getting the count of the achievements per user
+				
+				PreparedStatement st = conn.prepareStatement("SELECT * FROM exercises WHERE E_Num = ?");
+				st.setObject(1, "");
+
+				ResultSet result = st.executeQuery();
+				
 				String query = "SELECT * FROM users " +
 						"WHERE U_Pts <= (SELECT U_Pts FROM users WHERE U_Usn ='" + user.getUsername() + "') AND U_Usn != '" + user.getUsername() + "' " +
 						"ORDER BY U_Pts ASC " +

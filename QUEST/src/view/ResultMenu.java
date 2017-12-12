@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.swing.JFrame;
@@ -160,11 +161,22 @@ public class ResultMenu {
 					conn = (Connection) DriverManager.getConnection(db.getIP(), db.getDbu(), db.getDbp());	
 					stmt = (Statement) conn.createStatement();
 					
-					String bossclear = "INSERT INTO userachievements (U_Num, A_Num) " +
-							"VALUES ('" + user.getUserNumber() + "', '" + emblem + "')" +
-							"ON DUPLICATE KEY UPDATE U_Num = U_Num"; 
+					PreparedStatement bossclear = conn.prepareStatement("SELECT * FROM userachievements WHERE U_Num = ? AND A_Num = ?");
+					bossclear.setObject(1, user.getUserNumber());
+					bossclear.setObject(2, emblem);
 
-					stmt.executeUpdate(bossclear);
+					ResultSet testingemblem = bossclear.executeQuery();
+					
+					if (testingemblem.next()) {
+						//do nothing
+					}
+					else {
+						PreparedStatement bossupdate = conn.prepareStatement("INSERT INTO userachievements (U_Num, A_Num) VALUES (?, ?)");
+						bossupdate.setObject(1, user.getUserNumber());
+						bossupdate.setObject(2, emblem);
+						
+						bossupdate.executeUpdate();
+					}
 
 					/**
 					 * This next snippet is to check whether or not they have cleared all the areas
@@ -172,11 +184,12 @@ public class ResultMenu {
 					 * and including 19 and 25 is 7.
 					 */
 
-					String areatest = "SELECT * " +
-							"FROM userachievements " +
-							"WHERE U_Num = " + user.getUserNumber() + " AND A_Num > 18 AND A_Num < 26";
+					PreparedStatement areatest = conn.prepareStatement("SELECT * FROM userachievements WHERE U_Num = ? AND A_Num > ? AND A_Num < ?");
+					areatest.setObject(1, user.getUserNumber());
+					areatest.setObject(2, 18);
+					areatest.setObject(3, 26);
 
-					ResultSet at = stmt.executeQuery(areatest);
+					ResultSet at = areatest.executeQuery();
 
 					int row = 0;
 					int count = 0;
@@ -186,11 +199,24 @@ public class ResultMenu {
 					}
 
 					if (count >= 7) {
-						String areaclear = "INSERT INTO userachievements (U_Num, A_Num) " +
-								"VALUES ('" + user.getUserNumber() + "', '26')" +
-								"ON DUPLICATE KEY UPDATE U_Num = U_Num"; 
+						
+						//to test if the user has already obtained the clear all areas badge
+						PreparedStatement st = conn.prepareStatement("SELECT * FROM userachievements WHERE U_Num = ? AND A_Num = ?");
+						st.setObject(1, user.getUserNumber());
+						st.setObject(2, 26);
 
-						stmt.executeUpdate(areaclear);
+						ResultSet testingall = st.executeQuery();
+						
+						if (testingall.next()) {
+							//do nothing
+						}
+						else {
+							PreparedStatement allupdate = conn.prepareStatement("INSERT INTO userachievements VALUES (?, ?)");
+							allupdate.setObject(1, user.getUserNumber());
+							allupdate.setObject(2, 26);
+
+							allupdate.executeUpdate();
+						}
 					}
 					ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/no-badge.png"));
 					JOptionPane.showMessageDialog(null, "You have obtained an achievement!", "Congratulations!", JOptionPane.PLAIN_MESSAGE, icon);
@@ -238,11 +264,22 @@ public class ResultMenu {
 					case 7: emblem = 25; break;
 					}
 
-					String bossclear = "INSERT INTO userachievements (U_Num, A_Num) " +
-							"VALUES ('" + user.getUserNumber() + "', '" + emblem + "')" +
-							"ON DUPLICATE KEY UPDATE U_Num = U_Num"; 
+					PreparedStatement bossclear = conn.prepareStatement("SELECT * FROM userachievements WHERE U_Num = ? AND A_Num = ?");
+					bossclear.setObject(1, user.getUserNumber());
+					bossclear.setObject(2, emblem);
 
-					stmt.executeUpdate(bossclear);
+					ResultSet testingemblem = bossclear.executeQuery();
+					
+					if (testingemblem.next()) {
+						//do nothing
+					}
+					else {
+						PreparedStatement bossupdate = conn.prepareStatement("INSERT INTO userachievements (U_Num, A_Num) VALUES (?, ?)");
+						bossupdate.setObject(1, user.getUserNumber());
+						bossupdate.setObject(2, emblem);
+						
+						bossupdate.executeUpdate();
+					}
 
 					/**
 					 * This next snippet is to check whether or not they have cleared all the areas
@@ -250,11 +287,12 @@ public class ResultMenu {
 					 * and including 19 and 25 is 7.
 					 */
 
-					String areatest = "SELECT * " +
-							"FROM userachievements " +
-							"WHERE U_Num = " + user.getUserNumber() + " AND A_Num > 18 AND A_Num < 26";
-
-					ResultSet at = stmt.executeQuery(areatest);
+					PreparedStatement areatest = conn.prepareStatement("SELECT * FROM userachievements WHERE U_Num = ? AND A_Num > ? AND A_Num < ?");
+					areatest.setObject(1, user.getUserNumber());
+					areatest.setObject(2, 18);
+					areatest.setObject(3, 26);
+					
+					ResultSet at = areatest.executeQuery();
 
 					int row = 0;
 					int count = 0;
@@ -264,11 +302,23 @@ public class ResultMenu {
 					}
 
 					if (count >= 7) {
-						String areaclear = "INSERT INTO userachievements (U_Num, A_Num) " +
-								"VALUES ('" + user.getUserNumber() + "', '26')" +
-								"ON DUPLICATE KEY UPDATE U_Num = U_Num"; 
+						
+						PreparedStatement st = conn.prepareStatement("SELECT * FROM userachievements WHERE U_Num = ? AND A_Num = ?");
+						st.setObject(1, user.getUserNumber());
+						st.setObject(2, 26);
 
-						stmt.executeUpdate(areaclear);
+						ResultSet testingall = st.executeQuery();
+						
+						if (testingall.next()) {
+							//do nothing
+						}
+						else {
+							PreparedStatement allupdate = conn.prepareStatement("INSERT INTO userachievements VALUES (?, ?)");
+							allupdate.setObject(1, user.getUserNumber());
+							allupdate.setObject(2, 26);
+
+							allupdate.executeUpdate();
+						}
 					}
 
 					String testquery = "SELECT * " +
