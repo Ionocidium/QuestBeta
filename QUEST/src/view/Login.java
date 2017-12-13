@@ -105,6 +105,8 @@ public class Login extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		
 
 		setResizable(false);
 		setTitle("Login Page");
@@ -152,7 +154,10 @@ public class Login extends JFrame {
 			int result = JOptionPane.showConfirmDialog(null, myPanel, 
 					"Database Information", JOptionPane.OK_CANCEL_OPTION);
 			
-			if ((ipField.getText() == null || ipField.getText().equals("") || dUserField.getText() == null || dUserField.getText().equals("")) && result != JOptionPane.CANCEL_OPTION) {
+			if (result == -1) {
+				System.exit(0);
+			}
+			else if ((ipField.getText() == null || ipField.getText().equals("") || dUserField.getText() == null || dUserField.getText().equals("")) && result != JOptionPane.CANCEL_OPTION) {
 				JOptionPane.showMessageDialog(null, "Please input something in the IP Address Field and/or the Database Username Field.");
 				nocheck = true;
 			}

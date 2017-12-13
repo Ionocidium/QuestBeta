@@ -59,17 +59,28 @@ public class ECompiler {
 
 		LocalConfiguration local = LocalConfiguration.getInstance();
 
-		if (Files.exists(Paths.get("C:\\Program Files (x86)\\Dev-Cpp\\MinGW64\\bin\\gcc.exe"))) {
-			itExists = true;
-			//System.out.println("it exists!!!\n");
-			//LocalConfiguration local = LocalConfiguration.getInstance();
+		String gcc = "";
+		
+		System.out.println(local.getGccPath());
+		
+		if (!Files.exists(Paths.get(local.getGccPath()))) {
+			//C:\\Program Files (x86)\\Dev-Cpp\\MinGW64\\bin\\gcc.exe
+			//C:\Program Files (x86)\Dev-Cpp\MinGW64\bin\gcc.exe
+			gcc = JOptionPane.showInputDialog("Input the GCC (GNU Compiler Collection) location.");
+			if (Files.exists(Paths.get(gcc))) {
+				itExists = true;
 
-			Path path = Paths.get("C:\\Program Files (x86)\\Dev-Cpp\\MinGW64\\bin\\gcc.exe");
-			local.setGccPath(path.toAbsolutePath().toString());	
+				Path path = Paths.get(gcc);
+				local.setGccPath(path.toAbsolutePath().toString());	
+			}
+		}
+		
+		if (Files.exists(Paths.get(gcc))) {
+			itExists = true;
 		}
 
 		else {
-			JOptionPane.showMessageDialog(null, "PDE-C cannot find the gcc.exe specified. Please use the settings to fix the path.", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "QUEST cannot find the gcc.exe specified. Please use the settings to fix the path.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 		return itExists;
@@ -95,6 +106,7 @@ public class ECompiler {
 			try {
 				if (filePath != null) {
 					path = filePath;
+					System.out.println(filePath.toString());
 					CommandLineControls clc = new CommandLineControls(filePath.toString());
 
 					if (!clc.getStdOut().equals("")) {

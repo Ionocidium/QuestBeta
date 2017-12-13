@@ -1015,6 +1015,7 @@ public class TeacherModule {
 		 */
 		
 		areaTable = new JTable();
+		areaTable.setRowSelectionAllowed(false);
 		
 		areaTable.setModel(new DefaultTableModel(
 			new Object[][] {
