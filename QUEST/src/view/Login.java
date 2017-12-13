@@ -139,7 +139,7 @@ public class Login extends JFrame {
 		while (validIP == false) {
 			JTextField ipField = new JTextField();
 			JTextField dUserField = new JTextField(15);
-			JTextField dUserPassword = new JTextField(15);
+			JTextField dUserPassword = new JPasswordField(15);
 
 			JPanel myPanel = new JPanel(new GridLayout(0, 1, 2, 2));
 			

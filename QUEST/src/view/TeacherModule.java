@@ -1019,13 +1019,13 @@ public class TeacherModule {
 		
 		areaTable.setModel(new DefaultTableModel(
 			new Object[][] {
-				{1, "Varisland"},
-				{2, "Syntown"},
-				{3, "Inoutown"},
-				{4, "Elsif Village"},
-				{5, "Looping Meadows"},
-				{6, "City of No Return"},
-				{7, "The Tower of Knowledge"},
+				{new Integer(1), "Varisland"},
+				{new Integer(2), "Syntown"},
+				{new Integer(3), "Inoutown"},
+				{new Integer(4), "Elsif Village"},
+				{new Integer(5), "Looping Meadows"},
+				{new Integer(6), "City of No Return"},
+				{new Integer(7), "The Tower of Knowledge"},
 			},
 			new String[] {
 				"Area Number", "Area Name"
@@ -1036,6 +1036,12 @@ public class TeacherModule {
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
 			}
 		});
 		areaTable.getColumnModel().getColumn(0).setResizable(false);

@@ -512,7 +512,7 @@ public class MainMenu extends JFrame {
 		bRandomTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/key.png"));
+					//ImageIcon icon = new ImageIcon(MainMenu.class.getResource("/key.png"));
 					if (allclear == true) {
 						//moving windows
 						TestMenu tframe = new TestMenu(user, question, db);
@@ -523,7 +523,7 @@ public class MainMenu extends JFrame {
 
 						//JOptionPane.showMessageDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
 
-						String input = (String) JOptionPane.showInputDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!\n...you can also input the password if you have it.", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon, null, "");
+						String input = (String) JOptionPane.showInputDialog(null, "The Boss Room is still locked! Complete the main quest to proceed!\n...you can also input the password if you have it.", "Boss Room", JOptionPane.PLAIN_MESSAGE);
 
 						if (input != null && input.equals("continue")) {
 						//if (input != null && input.equals(question.getAreaPassword())) {
@@ -558,7 +558,7 @@ public class MainMenu extends JFrame {
 								e.printStackTrace();
 							}
 
-							JOptionPane.showMessageDialog(null, "The Boss Room is unlocked! Proceed to challenge the boss now!", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
+							JOptionPane.showMessageDialog(null, "The Boss Room is unlocked! Proceed to challenge the boss now!", "Boss Room", JOptionPane.PLAIN_MESSAGE);
 
 							question.setCleared(1);
 							//moving windows
@@ -567,7 +567,7 @@ public class MainMenu extends JFrame {
 							dispose();
 						}
 						else {
-							JOptionPane.showMessageDialog(null, "The Boss Door doesn't budge.", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
+							JOptionPane.showMessageDialog(null, "The Boss Door doesn't budge.", "Boss Room", JOptionPane.PLAIN_MESSAGE);
 						}
 					}
 					else if (user.getArea() == 7) {
@@ -579,7 +579,7 @@ public class MainMenu extends JFrame {
 						dispose();
 					}
 					else if (emblemcheck >= 1) {
-						JOptionPane.showMessageDialog(null, "The Boss Room is empty...", "Boss Room", JOptionPane.PLAIN_MESSAGE, icon);
+						JOptionPane.showMessageDialog(null, "The Boss Room is empty...", "Boss Room", JOptionPane.PLAIN_MESSAGE);
 					}
 					else {
 						//moving windows
